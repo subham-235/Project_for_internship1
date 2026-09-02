@@ -2,7 +2,7 @@
 
 A complete mock-first doctor booking workflow built with Next.js App Router, TypeScript and Tailwind CSS.
 
-## Day 1 features
+## Day 4 features
 
 - Project setup and local run
 - Responsive patient landing page
