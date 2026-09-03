@@ -76,6 +76,8 @@ import {
   doctors,
 } from "@/lib/mock-data/doctors";
 
+import StatCard from "@/components/ui/StatCard";
+
 
 type Filter =
   | "all"
@@ -197,22 +199,22 @@ function getStatusClasses(
     status
   ) {
     case "pending":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#D96B32]";
+      return "border-amber-200 bg-amber-50 text-amber-700";
 
     case "confirmed":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]";
+      return "border-emerald-200 bg-emerald-50 text-emerald-700";
 
     case "completed":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#D96B32]";
+      return "border-emerald-200 bg-emerald-50 text-emerald-700";
 
     case "cancelled":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]";
+      return "border-rose-200 bg-rose-50 text-rose-700";
 
     case "missed":
-      return "border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68]";
+      return "border-rose-200 bg-rose-50 text-rose-700";
 
     default:
-      return "border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68]";
+      return "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]";
   }
 }
 
@@ -1111,7 +1113,7 @@ export default function AllAppointmentsPage() {
 
 
       setMessage(
-        "Appointment rescheduled successfully."
+        "New time proposed. This appointment is pending patient approval."
       );
     };
 
@@ -1494,7 +1496,7 @@ export default function AllAppointmentsPage() {
 
         <div className="text-center">
 
-          <div className="mx-auto size-9 animate-spin rounded-full border-4 border-[#F2C2A7] border-t-[var(--brand)]" />
+          <div className="mx-auto size-9 animate-spin rounded-full border-4 border-[#dbeafe] border-t-[var(--brand)]" />
 
           <p className="mt-4 text-sm text-[var(--muted)]">
             Loading appointments...
@@ -1508,47 +1510,43 @@ export default function AllAppointmentsPage() {
 
 
   return (
-    <main className="min-h-screen bg-[#F7F4EF] text-[#12100F] lg:pl-[17.5rem]">
+    <main className="min-h-screen bg-[#F8FAFC] text-[#0B1329] lg:pl-[17.5rem]">
 
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17.5rem] flex-col bg-[#12100F] px-4 text-white lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17.5rem] flex-col bg-[#0B1329] px-4 text-white lg:flex">
         <Link
           href="/"
           className="flex h-20 items-center gap-3 border-b border-white/10 px-2"
         >
-          <div className="grid size-10 place-items-center rounded-xl bg-[#F2C2A7] text-[#12100F]">
+          <div className="grid size-10 place-items-center rounded-xl bg-[#dbeafe] text-[#0B1329]">
             <Stethoscope size={21} />
           </div>
 
           <div>
             <p className="text-lg font-bold tracking-tight">Schedula</p>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#F2C2A7]/55">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#dbeafe]/55">
               Doctor workspace
             </p>
           </div>
         </Link>
 
         <nav className="mt-7 space-y-1.5" aria-label="Doctor workspace navigation">
-          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#F2C2A7]/40">
+          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#dbeafe]/40">
             Workspace
           </p>
 
-          <Link href="/doctor-dashboard" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white">
+          <Link href="/doctor-dashboard" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white">
             <LayoutDashboard size={18} /> Overview
           </Link>
 
-          <Link href="/doctor-dashboard/appointments" className="flex items-center gap-3 rounded-xl bg-white px-3.5 py-3 text-sm font-semibold text-[#12100F] shadow-sm">
+          <Link href="/doctor-dashboard/appointments" className="flex items-center gap-3 rounded-xl bg-white px-3.5 py-3 text-sm font-semibold text-[#0B1329] shadow-sm">
             <ListChecks size={18} /> Appointments
           </Link>
 
-          <Link href="/doctor-dashboard/calendar" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white">
-            <CalendarDays size={18} /> Calendar
-          </Link>
-
-          <Link href="/doctor-dashboard/prescriptions" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white">
+          <Link href="/doctor-dashboard/prescriptions" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white">
             <Pill size={18} /> Prescriptions
           </Link>
 
-          <Link href="/doctor-dashboard/profile" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white">
+          <Link href="/doctor-dashboard/profile" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white">
             <CircleUserRound size={18} /> Profile
           </Link>
         </nav>
@@ -1556,12 +1554,12 @@ export default function AllAppointmentsPage() {
         {profile && (
           <div className="mt-auto mb-4 rounded-xl border border-white/10 bg-white/7 p-4">
             <div className="flex items-center gap-3">
-              <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#F2C2A7] text-sm font-bold text-[#12100F]">
+              <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#dbeafe] text-sm font-bold text-[#0B1329]">
                 {profile.initials}
               </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{profile.name}</p>
-                <p className="truncate text-xs text-[#F2C2A7]/55">{profile.specialty}</p>
+                <p className="truncate text-xs text-[#dbeafe]/55">{profile.specialty}</p>
               </div>
             </div>
           </div>
@@ -1572,7 +1570,7 @@ export default function AllAppointmentsPage() {
 
         <Link
           href="/doctor-dashboard"
-          className="inline-flex rounded-xl border border-[#DDD7D0] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--brand)] shadow-sm hover:border-[var(--brand)] lg:hidden"
+          className="inline-flex rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--brand)] shadow-sm hover:border-[var(--brand)] lg:hidden"
         >
           ← Back to dashboard
         </Link>
@@ -1580,11 +1578,11 @@ export default function AllAppointmentsPage() {
 
         {/* HEADER */}
 
-        <div className="relative mt-5 overflow-hidden rounded-[18px] bg-[#E5483B] p-6 text-white shadow-[0_18px_50px_rgba(18,16,15,0.14)] sm:p-8 lg:mt-0">
+        <div className="relative mt-5 overflow-hidden rounded-[18px] bg-[#2563eb] p-6 text-white shadow-[0_18px_50px_rgba(11,19,41,0.14)] sm:p-8 lg:mt-0">
 
           <div className="absolute -right-20 -top-28 size-72 rounded-full border-[44px] border-white/6" />
 
-          <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#F2C2A7]/75">
+          <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#dbeafe]/75">
             Clinical work queue
           </p>
 
@@ -1592,7 +1590,7 @@ export default function AllAppointmentsPage() {
             Appointments
           </h1>
 
-          <p className="relative mt-2 max-w-2xl text-sm leading-6 text-[#F7F4EF]/75">
+          <p className="relative mt-2 max-w-2xl text-sm leading-6 text-[#F8FAFC]/75">
             Review patient requests, prepare for upcoming consultations, and complete follow-up care from one focused workspace.
           </p>
 
@@ -1600,53 +1598,10 @@ export default function AllAppointmentsPage() {
 
 
         <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Appointment summary">
-          <article className="rounded-xl border border-[#DDD7D0] bg-white p-4 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-[#746E68]">All appointments</p>
-                <p className="mt-1 text-2xl font-bold">{counts.all}</p>
-              </div>
-              <div className="grid size-10 place-items-center rounded-xl bg-[#F7F4EF] text-[#E5483B]">
-                <UsersRound size={18} />
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-xl border border-[#F2C2A7] bg-white p-4 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-[#D96B32]">Awaiting review</p>
-                <p className="mt-1 text-2xl font-bold">{counts.pending}</p>
-              </div>
-              <div className="grid size-10 place-items-center rounded-xl bg-[#F7F4EF] text-[#D96B32]">
-                <Clock3 size={18} />
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-xl border border-[#F2C2A7] bg-white p-4 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-[#C9362D]">Confirmed</p>
-                <p className="mt-1 text-2xl font-bold">{counts.confirmed}</p>
-              </div>
-              <div className="grid size-10 place-items-center rounded-xl bg-[#F7F4EF] text-[#C9362D]">
-                <CheckCircle2 size={18} />
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-xl border border-[#F2C2A7] bg-white p-4 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-[#D96B32]">Completed</p>
-                <p className="mt-1 text-2xl font-bold">{counts.completed}</p>
-              </div>
-              <div className="grid size-10 place-items-center rounded-xl bg-[#F7F4EF] text-[#D96B32]">
-                <FileText size={18} />
-              </div>
-            </div>
-          </article>
+          <StatCard label="All appointments" value={counts.all} icon={UsersRound} tone="brand" />
+          <StatCard label="Awaiting review" value={counts.pending} icon={Clock3} tone="warning" />
+          <StatCard label="Confirmed" value={counts.confirmed} icon={CheckCircle2} tone="success" />
+          <StatCard label="Completed" value={counts.completed} icon={FileText} tone="success" />
         </section>
 
 
@@ -1654,7 +1609,7 @@ export default function AllAppointmentsPage() {
 
         {message && (
 
-          <div className="mt-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm font-medium text-[#C9362D]">
+          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#C9362D]">
             <CheckCircle2 size={15} className="mr-1 inline" /> {message}
           </div>
 
@@ -1665,7 +1620,7 @@ export default function AllAppointmentsPage() {
 
         {error && (
 
-          <div className="mt-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm text-[#C9362D]">
+          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm text-[#C9362D]">
             {error}
           </div>
 
@@ -1674,7 +1629,7 @@ export default function AllAppointmentsPage() {
 
         {/* FILTERS */}
 
-        <section className="mt-5 rounded-xl border border-[#DDD7D0] bg-white p-4 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
+        <section className="mt-5 rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_8px_24px_rgba(11,19,41,0.04)]">
 
           <div className="mb-4 flex items-center gap-2 text-sm font-bold">
             <Search size={16} className="text-[var(--brand)]" />
@@ -1698,7 +1653,7 @@ export default function AllAppointmentsPage() {
 
               placeholder="Search patient, email or reason..."
 
-              className="rounded-xl border border-[var(--line)] bg-[#F7F4EF] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white"
+              className="rounded-xl border border-[var(--line)] bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white"
             />
 
 
@@ -1717,7 +1672,7 @@ export default function AllAppointmentsPage() {
                 )
               }
 
-              className="rounded-xl border border-[var(--line)] bg-[#F7F4EF] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white"
+              className="rounded-xl border border-[var(--line)] bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white"
             />
 
           </div>
@@ -1747,7 +1702,7 @@ export default function AllAppointmentsPage() {
                     filter ===
                     item
                       ? "bg-[var(--brand)] text-white"
-                      : "border border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68] hover:bg-white"
+                      : "border border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B] hover:bg-white"
                   }`}
                 >
 
@@ -1777,7 +1732,7 @@ export default function AllAppointmentsPage() {
                   setDateFilter("");
                 }}
 
-                className="rounded-xl border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold hover:border-[#F2C2A7] hover:text-[#C9362D]"
+                className="rounded-xl border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold hover:border-[#dbeafe] hover:text-[#C9362D]"
               >
                 Clear filters
               </button>
@@ -1795,7 +1750,7 @@ export default function AllAppointmentsPage() {
 
           {/* APPOINTMENT LIST */}
 
-          <section className="overflow-hidden rounded-xl border border-[#DDD7D0] bg-white shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
+          <section className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_8px_24px_rgba(11,19,41,0.04)]">
 
             <div className="flex items-center justify-between gap-4 border-b border-[var(--line)] px-5 py-4">
 
@@ -1811,7 +1766,7 @@ export default function AllAppointmentsPage() {
 
               </div>
 
-              <span className="rounded-full bg-[#F7F4EF] px-3 py-1 text-xs font-bold text-[var(--brand)]">
+              <span className="rounded-full bg-[#F8FAFC] px-3 py-1 text-xs font-bold text-[var(--brand)]">
                 {visible.length} result{visible.length === 1 ? "" : "s"}
               </span>
 
@@ -1857,8 +1812,8 @@ export default function AllAppointmentsPage() {
                       className={`w-full p-5 text-left transition ${
                         selectedId ===
                         booking.id
-                          ? "bg-[#F7F4EF] shadow-[inset_3px_0_0_#E5483B]"
-                          : "hover:bg-[#F7F4EF]"
+                          ? "bg-[#F8FAFC] shadow-[inset_3px_0_0_#2563eb]"
+                          : "hover:bg-[#F8FAFC]"
                       }`}
                     >
 
@@ -1866,7 +1821,7 @@ export default function AllAppointmentsPage() {
 
                         <div className="flex items-start gap-4">
 
-                          <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#F2C2A7] text-sm font-bold text-[var(--brand)]">
+                          <div className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#dbeafe] text-sm font-bold text-[var(--brand)]">
 
                             {getInitials(
                               booking.patientName
@@ -1944,7 +1899,7 @@ export default function AllAppointmentsPage() {
                             }
                           </span>
 
-                          <span className="grid size-8 place-items-center rounded-lg border border-[#DDD7D0] text-[#746E68]">
+                          <span className="grid size-8 place-items-center rounded-lg border border-[#E2E8F0] text-[#64748B]">
                             <ChevronRight size={15} />
                           </span>
                         </div>
@@ -1962,7 +1917,7 @@ export default function AllAppointmentsPage() {
 
               <div className="p-14 text-center">
 
-                <div className="mx-auto grid size-12 place-items-center rounded-xl bg-[#F7F4EF] text-[#746E68]">
+                <div className="mx-auto grid size-12 place-items-center rounded-xl bg-[#F8FAFC] text-[#64748B]">
                   <UserRound size={20} />
                 </div>
 
@@ -1983,7 +1938,7 @@ export default function AllAppointmentsPage() {
 
           {/* DETAILS */}
 
-          <aside className="h-fit rounded-xl border border-[#DDD7D0] bg-white p-5 shadow-[0_8px_24px_rgba(18,16,15,0.04)] xl:sticky xl:top-6">
+          <aside className="h-fit rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] xl:sticky xl:top-6">
 
             <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand)]">
               <FileText size={14} /> Appointment details
@@ -1998,7 +1953,7 @@ export default function AllAppointmentsPage() {
 
                 <div className="flex items-center gap-3">
 
-                  <div className="grid size-12 place-items-center rounded-xl bg-[#F2C2A7] text-sm font-bold text-[var(--brand)]">
+                  <div className="grid size-12 place-items-center rounded-xl bg-[#dbeafe] text-sm font-bold text-[var(--brand)]">
 
                     {getInitials(
                       selected.patientName
@@ -2042,7 +1997,7 @@ export default function AllAppointmentsPage() {
 
                 {/* DETAILS */}
 
-                <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-1 [&>div]:rounded-xl [&>div]:bg-[#F7F4EF] [&>div]:p-3.5">
+                <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-1 [&>div]:rounded-xl [&>div]:bg-[#F8FAFC] [&>div]:p-3.5">
 
                   <div>
 
@@ -2165,7 +2120,7 @@ export default function AllAppointmentsPage() {
 
                 {selected.attachment && (
 
-                  <div className="mt-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF]/50 p-4">
+                  <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC]/50 p-4">
 
                     <p className="text-xs font-semibold uppercase tracking-wide text-[#C9362D]">
                       Medical Document
@@ -2233,7 +2188,7 @@ export default function AllAppointmentsPage() {
                 {/* PENDING */}
 
                 {selected.status ===
-                  "pending" && (
+                  "pending" && !selected.rescheduleApprovalPending && (
 
                   <div className="mt-7">
 
@@ -2276,7 +2231,7 @@ export default function AllAppointmentsPage() {
                           )
                         }
 
-                        className="rounded-xl border border-[#F2C2A7] bg-white px-4 py-3 text-sm font-semibold text-[#C9362D] hover:bg-[#F7F4EF]"
+                        className="rounded-xl border border-[#dbeafe] bg-white px-4 py-3 text-sm font-semibold text-[#C9362D] hover:bg-[#F8FAFC]"
                       >
                         Decline
                       </button>
@@ -2286,6 +2241,18 @@ export default function AllAppointmentsPage() {
                   </div>
 
                 )}
+
+                {selected.status === "pending" &&
+                  selected.rescheduleApprovalPending && (
+                    <div className="mt-7 rounded-xl border border-[#E8CF68] bg-[#FFF8D9] p-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-[#8A6500]">
+                        Awaiting patient approval
+                      </p>
+                      <p className="mt-2 text-sm text-[#6D5700]">
+                        The proposed appointment time will become confirmed after the patient approves it.
+                      </p>
+                    </div>
+                  )}
 
 
                 {/* CONFIRMED + FUTURE */}
@@ -2313,7 +2280,7 @@ export default function AllAppointmentsPage() {
                             openReschedule
                           }
 
-                          className="rounded-xl border border-[var(--brand)] bg-white px-4 py-3 text-sm font-semibold text-[var(--brand)] hover:bg-[#F7F4EF]"
+                          className="rounded-xl border border-[var(--brand)] bg-white px-4 py-3 text-sm font-semibold text-[var(--brand)] hover:bg-[#F8FAFC]"
                         >
                           Reschedule
                         </button>
@@ -2331,7 +2298,7 @@ export default function AllAppointmentsPage() {
                             ),
                           })}
 
-                          className="rounded-xl border border-[#F2C2A7] bg-white px-4 py-3 text-sm font-semibold text-[#C9362D] hover:bg-[#F7F4EF]"
+                          className="rounded-xl border border-[#dbeafe] bg-white px-4 py-3 text-sm font-semibold text-[#C9362D] hover:bg-[#F8FAFC]"
                         >
                           Cancel
                         </button>
@@ -2393,7 +2360,7 @@ export default function AllAppointmentsPage() {
                             )
                           }
 
-                          className="rounded-xl border border-[#DDD7D0] bg-white px-4 py-3 text-sm font-semibold hover:bg-[#F7F4EF]"
+                          className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm font-semibold hover:bg-[#F8FAFC]"
                         >
                           Missed
                         </button>
@@ -2412,7 +2379,7 @@ export default function AllAppointmentsPage() {
 
                   <div className="mt-7">
 
-                    <div className="rounded-xl border border-[#F2C2A7] bg-[#F7F4EF]/50 p-4">
+                    <div className="rounded-xl border border-[#dbeafe] bg-[#F8FAFC]/50 p-4">
 
                       <div className="flex items-start justify-between gap-4">
 
@@ -2422,7 +2389,7 @@ export default function AllAppointmentsPage() {
                             Prescription
                           </p>
 
-                          <p className="mt-2 font-semibold text-[#12100F]">
+                          <p className="mt-2 font-semibold text-[#0B1329]">
 
                             {prescription
                               ? "Prescription Available"
@@ -2504,7 +2471,7 @@ export default function AllAppointmentsPage() {
                     </div>
 
 
-                    <div className="mt-4 rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-center">
+                    <div className="mt-4 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-center">
 
                       <p className="text-sm font-semibold">
                         Appointment completed
@@ -2530,7 +2497,7 @@ export default function AllAppointmentsPage() {
                     "missed"
                 ) && (
 
-                  <div className="mt-7 rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-center">
+                  <div className="mt-7 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-center">
 
                     <p className="text-sm font-semibold">
                       Read-only appointment
@@ -2685,7 +2652,7 @@ Vitamin C 500 mg — once daily — 5 days`
                       </label>
 
 
-                      <div className="rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-3 text-xs leading-5 text-[#C9362D]">
+                      <div className="rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-3 text-xs leading-5 text-[#C9362D]">
                         Saving a new prescription will notify the patient automatically.
                       </div>
 
@@ -2857,12 +2824,12 @@ Vitamin C 500 mg — once daily — 5 days`
                                   type="button"
 
                                   onClick={() => setConfirmation({
-                                    title: "Confirm new appointment time",
-                                    description: `Move this appointment to ${slot.date} at ${slot.time}? The patient will receive an update.`,
+                                    title: "Propose new appointment time",
+                                    description: `Propose ${slot.date} at ${slot.time}? The appointment will remain pending until the patient approves it.`,
                                     action: () => applyReschedule(slot),
                                   })}
 
-                                  className="rounded-lg border border-[var(--line)] px-3 py-2.5 text-xs font-semibold transition hover:border-[var(--brand)] hover:bg-[#F7F4EF] hover:text-[var(--brand)]"
+                                  className="rounded-lg border border-[var(--line)] px-3 py-2.5 text-xs font-semibold transition hover:border-[var(--brand)] hover:bg-[#F8FAFC] hover:text-[var(--brand)]"
                                 >
                                   {
                                     slot.time
@@ -2876,7 +2843,7 @@ Vitamin C 500 mg — once daily — 5 days`
 
                         ) : (
 
-                          <p className="mt-4 rounded-xl bg-[#F7F4EF] p-3 text-sm text-[var(--muted)]">
+                          <p className="mt-4 rounded-xl bg-[#F8FAFC] p-3 text-sm text-[var(--muted)]">
                             No slots available on this date.
                           </p>
 
@@ -2886,7 +2853,7 @@ Vitamin C 500 mg — once daily — 5 days`
 
                     ) : (
 
-                      <p className="mt-4 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-3 text-sm text-[#D96B32]">
+                      <p className="mt-4 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-3 text-sm text-[#D96B32]">
                         No alternative appointment slots are available.
                       </p>
 
@@ -2902,7 +2869,7 @@ Vitamin C 500 mg — once daily — 5 days`
 
               <div className="py-12 text-center">
 
-                <div className="mx-auto grid size-11 place-items-center rounded-full bg-[#F7F4EF]">
+                <div className="mx-auto grid size-11 place-items-center rounded-full bg-[#F8FAFC]">
                   <UserRound size={18} />
                 </div>
 
@@ -2921,14 +2888,14 @@ Vitamin C 500 mg — once daily — 5 days`
       </div>
 
       {confirmation && (
-        <div className="fixed inset-0 z-[70] grid place-items-center bg-[#12100F]/55 px-4 backdrop-blur-sm" onMouseDown={() => setConfirmation(null)}>
-          <section role="dialog" aria-modal="true" aria-labelledby="confirmation-title" onMouseDown={(event) => event.stopPropagation()} className="w-full max-w-md border border-[#DDD7D0] bg-white p-6 shadow-[0_24px_70px_rgba(18,16,15,0.18)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#E5483B]">Please confirm</p>
+        <div className="fixed inset-0 z-[70] grid place-items-center bg-[#0B1329]/55 px-4 backdrop-blur-sm" onMouseDown={() => setConfirmation(null)}>
+          <section role="dialog" aria-modal="true" aria-labelledby="confirmation-title" onMouseDown={(event) => event.stopPropagation()} className="w-full max-w-md border border-[#E2E8F0] bg-white p-6 shadow-[0_24px_70px_rgba(11,19,41,0.18)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2563eb]">Please confirm</p>
             <h2 id="confirmation-title" className="font-editorial mt-3 text-2xl">{confirmation.title}</h2>
-            <p className="mt-3 text-sm leading-6 text-[#746E68]">{confirmation.description}</p>
+            <p className="mt-3 text-sm leading-6 text-[#64748B]">{confirmation.description}</p>
             <div className="mt-7 grid grid-cols-2 gap-3">
-              <button type="button" onClick={() => setConfirmation(null)} className="rounded-lg border border-[#DDD7D0] px-4 py-3 text-sm font-semibold">Keep appointment</button>
-              <button type="button" onClick={() => { const action = confirmation.action; setConfirmation(null); action(); }} className="rounded-lg bg-[#E5483B] px-4 py-3 text-sm font-semibold text-white hover:bg-[#C9362D]">Confirm change</button>
+              <button type="button" onClick={() => setConfirmation(null)} className="rounded-lg border border-[#E2E8F0] px-4 py-3 text-sm font-semibold">Keep appointment</button>
+              <button type="button" onClick={() => { const action = confirmation.action; setConfirmation(null); action(); }} className="rounded-lg bg-[#2563eb] px-4 py-3 text-sm font-semibold text-white hover:bg-[#C9362D]">Confirm change</button>
             </div>
           </section>
         </div>

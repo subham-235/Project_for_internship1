@@ -8,6 +8,7 @@ import ForEveryone from "@/components/home/ForEveryone";
 import Testimonials from "@/components/home/Testimonials";
 import FinalCTA from "@/components/home/FinalCTA";
 import LandingFooter from "@/components/home/LandingFooter";
+import CareTicker from "@/components/home/CareTicker";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <LandingNavbar />
       <main>
         <Hero />
+        <CareTicker />
         <SpecialtySection />
         <FeaturedDoctors />
         <StatementSection />

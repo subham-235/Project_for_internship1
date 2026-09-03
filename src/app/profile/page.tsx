@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 
 import Navbar from "@/components/layout/Navbar";
+import Skeleton from "@/components/ui/Skeleton";
+import StatCard from "@/components/ui/StatCard";
+import { toast } from "sonner";
 import {
   getBookingsForPatient,
   getCurrentUser,
@@ -25,7 +28,7 @@ import {
 } from "@/lib/client-storage";
 import type { PatientProfile } from "@/types/user";
 
-const fieldClass = "mt-2 w-full rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white";
+const fieldClass = "mt-2 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)] focus:bg-white";
 
 function blankProfile(user: { id: string; name: string; email: string }): PatientProfile {
   return {
@@ -136,50 +139,45 @@ export default function PatientProfilePage() {
     setSaving(false);
     if (!success) {
       setError("Your profile could not be saved. Please try again.");
+      toast.error("Profile update failed", { description: "Please review your details and try again." });
       return;
     }
     setMessage("Health profile updated successfully.");
+    toast.success("Health profile updated", { description: "Your latest information is ready for future appointments." });
     window.setTimeout(() => setMessage(""), 3500);
   };
 
   if (loading || !profile) {
-    return <main className="grid min-h-screen place-items-center bg-[#F7F4EF] text-sm text-[var(--muted)]">Loading your profile...</main>;
+    return <main className="min-h-screen bg-[#F8FAFC] px-4 py-20"><div className="mx-auto max-w-6xl space-y-5"><Skeleton className="h-56 w-full rounded-2xl" /><div className="grid gap-3 sm:grid-cols-3"><Skeleton className="h-32" /><Skeleton className="h-32" /><Skeleton className="h-32" /></div></div></main>;
   }
 
   const summaries = [
-    { label: "Total prescriptions", value: summary.prescriptions, icon: ClipboardList, tone: "bg-[#F7F4EF] text-[#C9362D]" },
-    { label: "Completed appointments", value: summary.completed, icon: HeartPulse, tone: "bg-[#F7F4EF] text-[#D96B32]" },
-    { label: "Test reports", value: summary.reports, icon: FileText, tone: "bg-[#F7F4EF] text-[#D96B32]" },
+    { label: "Total prescriptions", value: summary.prescriptions, icon: ClipboardList, tone: "accent" as const },
+    { label: "Completed appointments", value: summary.completed, icon: HeartPulse, tone: "success" as const },
+    { label: "Test reports", value: summary.reports, icon: FileText, tone: "brand" as const },
   ];
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#F7F4EF] px-4 py-7 sm:px-7">
+      <main className="min-h-screen bg-[#F8FAFC] px-4 py-7 sm:px-7">
         <div className="mx-auto max-w-6xl">
-          <section className="relative overflow-hidden rounded-[18px] bg-[#E5483B] p-6 text-white shadow-[0_18px_50px_rgba(18,16,15,0.14)] sm:p-8">
+          <section className="relative overflow-hidden rounded-[18px] bg-[#2563eb] p-6 text-white shadow-[0_18px_50px_rgba(11,19,41,0.14)] sm:p-8">
             <div className="absolute -right-20 -top-28 size-72 rounded-full border-[44px] border-white/6" />
-            <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#F2C2A7]/75">Patient health record</p>
+            <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#dbeafe]/75">Patient health record</p>
             <h1 className="relative mt-2 text-3xl font-bold tracking-tight">My profile</h1>
-            <p className="relative mt-2 max-w-2xl text-sm leading-6 text-[#F7F4EF]/75">Keep your personal and medical information current so your care team has the right context.</p>
+            <p className="relative mt-2 max-w-2xl text-sm leading-6 text-[#F8FAFC]/75">Keep your personal and medical information current so your care team has the right context.</p>
             <div className="relative mt-5 max-w-md">
               <div className="flex justify-between text-xs font-semibold"><span>Profile completeness</span><span>{completeness}%</span></div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-[#F2C2A7]" style={{ width: String(completeness) + "%" }} /></div>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-[#dbeafe]" style={{ width: String(completeness) + "%" }} /></div>
             </div>
           </section>
 
           <section className="mt-5 grid gap-3 sm:grid-cols-3">
-            {summaries.map((item) => {
-              const Icon = item.icon;
-              return (
-                <article key={item.label} className="rounded-xl border border-[#DDD7D0] bg-white p-5 shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-                  <div className="flex items-center justify-between"><div><p className="text-xs font-semibold text-[#746E68]">{item.label}</p><p className="mt-2 text-3xl font-bold">{item.value}</p></div><div className={"grid size-11 place-items-center rounded-xl " + item.tone}><Icon size={20} /></div></div>
-                </article>
-              );
-            })}
+            {summaries.map((item) => <StatCard key={item.label} label={item.label} value={item.value} icon={item.icon} tone={item.tone} />)}
           </section>
 
-          {(message || error) && <div role={error ? "alert" : "status"} className={"mt-5 rounded-xl border px-4 py-3 text-sm font-semibold " + (error ? "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]" : "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]")}>{error || message}</div>}
+          {(message || error) && <div role={error ? "alert" : "status"} className={"mt-5 rounded-xl border px-4 py-3 text-sm font-semibold " + (error ? "border-[#dbeafe] bg-[#F8FAFC] text-[#C9362D]" : "border-[#dbeafe] bg-[#F8FAFC] text-[#C9362D]")}>{error || message}</div>}
 
           <div className="mt-5 space-y-5">
             <FormSection icon={UserRound} title="Personal information" description="Basic contact and identity details.">
@@ -215,8 +213,8 @@ export default function PatientProfilePage() {
             </FormSection>
           </div>
 
-          <div className="sticky bottom-4 mt-5 flex items-center justify-between gap-4 rounded-xl border border-[#DDD7D0] bg-white/95 p-4 shadow-xl backdrop-blur">
-            <p className="hidden items-center gap-2 text-xs text-[#746E68] sm:flex"><AlertCircle size={15} />Your information stays in this browser for this project.</p>
+          <div className="sticky bottom-4 mt-5 flex items-center justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white/95 p-4 shadow-xl backdrop-blur">
+            <p className="hidden items-center gap-2 text-xs text-[#64748B] sm:flex"><AlertCircle size={15} />Your information stays in this browser for this project.</p>
             <button type="button" onClick={save} disabled={saving} className="ml-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-deep)] disabled:opacity-60"><Save size={16} />{saving ? "Saving..." : "Save profile"}</button>
           </div>
         </div>
@@ -231,8 +229,8 @@ function Field({ label, wide = false, children }: { label: string; wide?: boolea
 
 function FormSection({ icon: Icon, title, description, children }: { icon: typeof UserRound; title: string; description: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-[18px] border border-[#DDD7D0] bg-white p-5 shadow-[0_8px_24px_rgba(18,16,15,0.04)] sm:p-6">
-      <div className="flex items-center gap-3"><div className="grid size-10 place-items-center rounded-xl bg-[#F2C2A7] text-[var(--brand)]"><Icon size={18} /></div><div><h2 className="font-bold">{title}</h2><p className="mt-1 text-xs text-[#746E68]">{description}</p></div></div>
+    <section className="rounded-[18px] border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
+      <div className="flex items-center gap-3"><div className="grid size-10 place-items-center rounded-xl bg-[#dbeafe] text-[var(--brand)]"><Icon size={18} /></div><div><h2 className="font-bold">{title}</h2><p className="mt-1 text-xs text-[#64748B]">{description}</p></div></div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">{children}</div>
     </section>
   );

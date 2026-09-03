@@ -4,7 +4,7 @@
     "userId": "doctor-001",
     "name": "Dr. Anika Rao",
     "initials": "AR",
-    "image": "https://randomuser.me/api/portraits/women/44.jpg",
+    "image": "/doctors/dr-anika-rao-4k.webp",
     "email": "anika@schedula.com",
     "phone": "9876500001",
     "registrationNumber": "WBMC-10001",
@@ -16,28 +16,16 @@
     "fee": 700,
     "availability": "Available today",
     "bio": "Experienced general physician focused on preventive care, lifestyle guidance and evidence-based primary healthcare.",
-    "education": [
-      "MBBS — Medical College Kolkata",
-      "MD — General Medicine"
-    ],
-    "languages": [
-      "English",
-      "Hindi",
-      "Bengali"
-    ],
-    "slots": [
-      "09:00 AM",
-      "10:30 AM",
-      "12:00 PM",
-      "04:00 PM"
-    ]
+    "education": ["MBBS — Medical College Kolkata", "MD — General Medicine"],
+    "languages": ["English", "Hindi", "Bengali"],
+    "slots": ["09:00 AM", "10:30 AM", "12:00 PM", "04:00 PM"]
   },
   {
     "id": "doc-002",
     "userId": "doctor-002",
     "name": "Dr. Martin Cole",
     "initials": "MC",
-    "image": "https://randomuser.me/api/portraits/men/32.jpg",
+    "image": "/doctors/dr-martin-cole-4k.webp",
     "email": "martin@schedula.com",
     "phone": "9876500002",
     "registrationNumber": "WBMC-10002",
@@ -49,27 +37,16 @@
     "fee": 900,
     "availability": "Next slot 11:30 AM",
     "bio": "Dermatologist specializing in acne, pigmentation, hair concerns and long-term skin health.",
-    "education": [
-      "MBBS",
-      "MD — Dermatology"
-    ],
-    "languages": [
-      "English",
-      "Hindi"
-    ],
-    "slots": [
-      "10:00 AM",
-      "11:30 AM",
-      "03:00 PM",
-      "05:00 PM"
-    ]
+    "education": ["MBBS", "MD — Dermatology"],
+    "languages": ["English", "Hindi"],
+    "slots": ["10:00 AM", "11:30 AM", "03:00 PM", "05:00 PM"]
   },
   {
     "id": "doc-003",
     "userId": "doctor-003",
     "name": "Dr. Rhea Sen",
     "initials": "RS",
-    "image": "https://randomuser.me/api/portraits/women/65.jpg",
+    "image": "/doctors/dr-rhea-sen-4k.webp",
     "email": "rhea@schedula.com",
     "phone": "9876500003",
     "registrationNumber": "WBMC-10003",
@@ -81,29 +58,16 @@
     "fee": 1200,
     "availability": "Available tomorrow",
     "bio": "Consultant cardiologist with a focus on hypertension, preventive cardiology and heart-risk assessment.",
-    "education": [
-      "MBBS",
-      "MD — Medicine",
-      "DM — Cardiology"
-    ],
-    "languages": [
-      "English",
-      "Bengali",
-      "Hindi"
-    ],
-    "slots": [
-      "09:30 AM",
-      "11:00 AM",
-      "02:30 PM",
-      "06:00 PM"
-    ]
+    "education": ["MBBS", "MD — Medicine", "DM — Cardiology"],
+    "languages": ["English", "Bengali", "Hindi"],
+    "slots": ["09:30 AM", "11:00 AM", "02:30 PM", "06:00 PM"]
   },
   {
     "id": "doc-004",
     "userId": "doctor-004",
     "name": "Dr. Arjun Mehta",
     "initials": "AM",
-    "image": "https://randomuser.me/api/portraits/men/46.jpg",
+    "image": "/doctors/dr-arjun-mehta-4k.webp",
     "email": "arjun@schedula.com",
     "phone": "9876500004",
     "registrationNumber": "WBMC-10004",
@@ -115,28 +79,16 @@
     "fee": 850,
     "availability": "Available today",
     "bio": "Orthopedic specialist treating sports injuries, joint pain, fractures and musculoskeletal conditions.",
-    "education": [
-      "MBBS",
-      "MS — Orthopedics"
-    ],
-    "languages": [
-      "English",
-      "Hindi",
-      "Bengali"
-    ],
-    "slots": [
-      "08:30 AM",
-      "01:00 PM",
-      "03:30 PM",
-      "07:00 PM"
-    ]
+    "education": ["MBBS", "MS — Orthopedics"],
+    "languages": ["English", "Hindi", "Bengali"],
+    "slots": ["08:30 AM", "01:00 PM", "03:30 PM", "07:00 PM"]
   },
   {
     "id": "doc-005",
     "userId": "doctor-005",
     "name": "Dr. Nandini Basu",
     "initials": "NB",
-    "image": "https://randomuser.me/api/portraits/women/68.jpg",
+    "image": "/doctors/dr-nandini-basu-4k.webp",
     "email": "nandini@schedula.com",
     "phone": "9876500005",
     "registrationNumber": "WBMC-10005",
@@ -148,28 +100,16 @@
     "fee": 650,
     "availability": "Next slot 12:30 PM",
     "bio": "Pediatrician providing preventive care, growth monitoring and treatment for common childhood illnesses.",
-    "education": [
-      "MBBS",
-      "MD — Pediatrics"
-    ],
-    "languages": [
-      "English",
-      "Bengali",
-      "Hindi"
-    ],
-    "slots": [
-      "09:00 AM",
-      "12:30 PM",
-      "04:30 PM",
-      "06:30 PM"
-    ]
+    "education": ["MBBS", "MD — Pediatrics"],
+    "languages": ["English", "Bengali", "Hindi"],
+    "slots": ["09:00 AM", "12:30 PM", "04:30 PM", "06:30 PM"]
   },
   {
     "id": "doc-006",
     "userId": "doctor-006",
     "name": "Dr. Kabir Kapoor",
     "initials": "KK",
-    "image": "https://randomuser.me/api/portraits/men/52.jpg",
+    "image": "/doctors/dr-kabir-kapoor-4k.webp",
     "email": "kabir@schedula.com",
     "phone": "9876500006",
     "registrationNumber": "WBMC-10006",
@@ -181,20 +121,8 @@
     "fee": 1400,
     "availability": "Available tomorrow",
     "bio": "Neurologist experienced in migraine, neuropathy, seizure disorders and neurological evaluation.",
-    "education": [
-      "MBBS",
-      "MD — Medicine",
-      "DM — Neurology"
-    ],
-    "languages": [
-      "English",
-      "Hindi"
-    ],
-    "slots": [
-      "10:30 AM",
-      "01:30 PM",
-      "04:00 PM",
-      "05:30 PM"
-    ]
+    "education": ["MBBS", "MD — Medicine", "DM — Neurology"],
+    "languages": ["English", "Hindi"],
+    "slots": ["10:30 AM", "01:30 PM", "04:00 PM", "05:30 PM"]
   }
 ]

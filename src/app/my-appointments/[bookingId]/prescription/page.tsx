@@ -50,10 +50,10 @@ export default function PatientPrescriptionPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-[calc(100vh-73px)] bg-[#F7F4EF] px-4 py-8 sm:px-7">
+      <main className="min-h-[calc(100vh-73px)] bg-[#F8FAFC] px-4 py-8 sm:px-7">
         <div className="mx-auto max-w-4xl">
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Link href="/my-appointments" className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#DDD7D0] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--brand)]">
+            <Link href="/my-appointments" className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--brand)]">
               <ArrowLeft size={16} /> My appointments
             </Link>
             {booking && prescription && <PrescriptionPdfButton booking={booking} prescription={prescription} />}
@@ -61,7 +61,7 @@ export default function PatientPrescriptionPage() {
           {booking && prescription ? (
             <PrescriptionView booking={booking} prescription={prescription} />
           ) : (
-            <section className="rounded-[18px] border border-[#DDD7D0] bg-white p-10 text-center">
+            <section className="rounded-[18px] border border-[#E2E8F0] bg-white p-10 text-center">
               <h1 className="text-xl font-bold">Prescription unavailable</h1>
               <p className="mt-2 text-sm text-[var(--muted)]">This prescription could not be found or is not available to this account.</p>
             </section>

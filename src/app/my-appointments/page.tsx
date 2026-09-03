@@ -2,13 +2,16 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   CalendarDays,
+  CheckCircle2,
   Download,
   FileText,
   RefreshCcw,
@@ -19,12 +22,15 @@ import {
 import Navbar from "@/components/layout/Navbar";
 
 import StatusBadge from "@/components/appointments/StatusBadge";
+import Button from "@/components/ui/Button";
+import Modal from "@/components/ui/Modal";
 
 import type { Booking } from "@/types/booking";
 
 import type { Prescription } from "@/types/prescription";
 
 import {
+  approveRescheduledBooking,
   getBookingsForPatient,
   getCurrentUser,
   getPrescriptionByBookingId,
@@ -145,6 +151,8 @@ export default function MyAppointmentsPage() {
 
       patientId: user.id,
 
+      patientName: user.name,
+
       patientEmail: user.email,
 
       rating,
@@ -156,6 +164,7 @@ export default function MyAppointmentsPage() {
 
     if (success) {
       setMessage("Thank you. Your review has been submitted.");
+      toast.success("Review published", { description: "The doctor’s live rating has been updated." });
 
       setReviewBooking(null);
 
@@ -166,7 +175,31 @@ export default function MyAppointmentsPage() {
       setTimeout(() => setMessage(""), 3000);
     } else {
       setMessage("You have already reviewed this appointment.");
+      toast.error("Review already submitted", { description: "Each completed appointment can be reviewed once." });
     }
+  };
+
+  const approveNewTime = (booking: Booking) => {
+    const user = getCurrentUser();
+
+    if (!user || (booking.patientId && booking.patientId !== user.id)) {
+      setMessage("Unable to approve this appointment.");
+      toast.error("Approval failed", { description: "Please sign in again and retry." });
+      return;
+    }
+
+    const updated = approveRescheduledBooking(booking.id);
+    setMessage(
+      updated
+        ? "New appointment time approved. Your appointment is now confirmed."
+        : "Unable to approve the new time. Please refresh and try again.",
+    );
+    if (updated) {
+      toast.success("New time confirmed", { description: `${formatAppointmentFullDate(updated.startsAt)} at ${formatAppointmentTime(updated.startsAt)}` });
+    } else {
+      toast.error("Could not approve the new time", { description: "Refresh the page and try again." });
+    }
+    load();
   };
 
   const tabs: Tab[] = ["upcoming", "completed", "cancelled", "missed"];
@@ -175,7 +208,7 @@ export default function MyAppointmentsPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#F7F4EF]">
+      <main className="min-h-screen bg-[#F8FAFC]">
         <section className="border-b border-[var(--line)] bg-[var(--ivory)]">
           <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand)]">
@@ -195,7 +228,7 @@ export default function MyAppointmentsPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {message && (
-            <div className="mb-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm font-medium text-[#C9362D]">
+            <div className="mb-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#C9362D]">
               {message}
             </div>
           )}
@@ -298,13 +331,13 @@ export default function MyAppointmentsPage() {
                             <button
                               type="button"
                               onClick={() => setReviewBooking(booking)}
-                              className="inline-flex items-center gap-2 rounded-xl border border-[var(--line)] px-3 py-2.5 text-xs font-semibold hover:border-[#F2C2A7] hover:text-[#D96B32]"
+                              className="inline-flex items-center gap-2 rounded-xl border border-[var(--line)] px-3 py-2.5 text-xs font-semibold hover:border-[#dbeafe] hover:text-[#D96B32]"
                             >
                               <Star size={15} />
                               Review Doctor
                             </button>
                           ) : (
-                            <span className="inline-flex items-center gap-1 rounded-xl bg-[#F7F4EF] px-3 py-2.5 text-xs font-semibold text-[#D96B32]">
+                            <span className="inline-flex items-center gap-1 rounded-xl bg-[#F8FAFC] px-3 py-2.5 text-xs font-semibold text-[#D96B32]">
                               <Star size={14} fill="currentColor" />
                               Reviewed
                             </span>
@@ -319,14 +352,33 @@ export default function MyAppointmentsPage() {
                           </Link>
                         </div>
                       )}
+
+                      {booking.status === "pending" &&
+                        booking.rescheduleApprovalPending && (
+                          <button
+                            type="button"
+                            onClick={() => approveNewTime(booking)}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#237A45] px-4 py-3 text-xs font-semibold text-white hover:bg-[#1C6338]"
+                          >
+                            <CheckCircle2 size={16} />
+                            Approve new time
+                          </button>
+                        )}
                     </div>
+
+                    {booking.status === "pending" &&
+                      booking.rescheduleApprovalPending && (
+                        <div className="mt-5 rounded-xl border border-[#E8CF68] bg-[#FFF8D9] px-4 py-3 text-sm text-[#6D5700]">
+                          <strong>Doctor proposed a new time.</strong> Review the date and time above, then approve it to confirm your appointment.
+                        </div>
+                      )}
 
                     {booking.status === "completed" && (
                       <div
                         className={`mt-5 rounded-xl border px-4 py-3 text-sm ${
                           prescription
-                            ? "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]"
-                            : "border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68]"
+                            ? "border-[#dbeafe] bg-[#F8FAFC] text-[#C9362D]"
+                            : "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]"
                         }`}
                       >
                         {prescription
@@ -339,7 +391,7 @@ export default function MyAppointmentsPage() {
               })
             ) : (
               <div className="rounded-xl border border-dashed border-[var(--line)] bg-white p-12 text-center">
-                <CalendarDays size={28} className="mx-auto text-[#DDD7D0]" />
+                <CalendarDays size={28} className="mx-auto text-[#E2E8F0]" />
 
                 <p className="mt-4 font-semibold">No {tab} appointments</p>
 
@@ -402,7 +454,7 @@ export default function MyAppointmentsPage() {
                           (medicine, index) => (
                             <li
                               key={`${medicine}-${index}`}
-                              className="rounded-lg bg-[#F7F4EF] px-3 py-2 font-medium"
+                              className="rounded-lg bg-[#F8FAFC] px-3 py-2 font-medium"
                             >
                               {index + 1}. {medicine}
                             </li>
@@ -429,61 +481,48 @@ export default function MyAppointmentsPage() {
           </div>
         )}
 
-        {reviewBooking && (
-          <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-            <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
-              <h2 className="text-xl font-semibold">
-                Review {reviewBooking.doctorName}
-              </h2>
-
-              <p className="mt-2 text-sm text-[var(--muted)]">
-                Share your experience from this completed appointment.
-              </p>
-
-              <div className="mt-6 flex gap-2">
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => setRating(item)}
-                    className="text-[#D96B32]"
-                  >
-                    <Star
-                      size={28}
-                      fill={item <= rating ? "currentColor" : "none"}
-                    />
-                  </button>
-                ))}
-              </div>
-
-              <textarea
-                rows={4}
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
-                placeholder="Write your review..."
-                className="mt-5 w-full resize-none rounded-xl border border-[var(--line)] px-4 py-3 text-sm outline-none focus:border-[var(--brand)]"
-              />
-
-              <div className="mt-5 grid grid-cols-2 gap-2">
-                <button
+        <Modal
+          open={Boolean(reviewBooking)}
+          onOpenChange={(open) => { if (!open) setReviewBooking(null); }}
+          title={reviewBooking ? `Review ${reviewBooking.doctorName}` : "Review your doctor"}
+          description="Share your experience from this completed appointment. Your rating updates the doctor’s profile and dashboard."
+          className="max-w-md"
+        >
+          <fieldset>
+            <legend className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Your rating</legend>
+            <div className="mt-3 flex gap-1.5" aria-label={`${rating} out of 5 stars`}>
+              {[1, 2, 3, 4, 5].map((item) => (
+                <motion.button
+                  key={item}
                   type="button"
-                  onClick={() => setReviewBooking(null)}
-                  className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-semibold"
+                  whileHover={{ y: -3, scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => setRating(item)}
+                  className="rounded-lg p-1 text-amber-500 focus-visible:ring-2 focus-visible:ring-brand"
+                  aria-label={`Rate ${item} star${item === 1 ? "" : "s"}`}
                 >
-                  Cancel
-                </button>
-
-                <button
-                  type="button"
-                  onClick={submitReview}
-                  className="rounded-xl bg-[var(--brand)] px-4 py-3 text-sm font-semibold text-white"
-                >
-                  Submit Review
-                </button>
-              </div>
+                  <Star size={30} fill={item <= rating ? "currentColor" : "none"} />
+                </motion.button>
+              ))}
             </div>
+          </fieldset>
+
+          <label className="mt-5 block">
+            <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Optional comment</span>
+            <textarea
+              rows={4}
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              placeholder="What went well?"
+              className="mt-2 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-[15px] outline-none focus:border-brand focus:ring-4 focus:ring-blue-100"
+            />
+          </label>
+
+          <div className="mt-5 grid grid-cols-2 gap-2">
+            <Button type="button" variant="outline" onClick={() => setReviewBooking(null)}>Cancel</Button>
+            <Button type="button" onClick={submitReview}>Submit review</Button>
           </div>
-        )}
+        </Modal>
       </main>
     </>
   );

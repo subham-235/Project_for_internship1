@@ -2,18 +2,181 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LogOut, Menu, Stethoscope, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { CalendarDays, LogOut, Menu, Stethoscope, User, X } from "lucide-react";
 import { clearCurrentUser, getCurrentUser, type StoredUser } from "@/lib/client-storage";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function Navbar() {
   const [user, setUser] = useState<StoredUser | null>(null);
   const [open, setOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
+
   useEffect(() => {
     const timer = window.setTimeout(() => setUser(getCurrentUser()), 0);
     return () => window.clearTimeout(timer);
   }, []);
-  const logout = () => { clearCurrentUser(); setUser(null); setOpen(false); };
 
-  return <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--background)]/95 backdrop-blur-xl"><div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"><Link href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center bg-[var(--brand)] text-white"><Stethoscope size={18} /></span><span className="text-lg font-semibold tracking-[-0.04em]">Schedula</span></Link><nav className="hidden items-center gap-7 text-sm font-medium text-[var(--muted)] md:flex"><Link href="/doctors" className="hover:text-[var(--brand)]">Find doctors</Link>{user?.role === "patient" && <><Link href="/my-appointments" className="hover:text-[var(--brand)]">Appointments</Link><Link href="/profile" className="hover:text-[var(--brand)]">Profile</Link></>}{user?.role === "doctor" && <Link href="/doctor-dashboard" className="hover:text-[var(--brand)]">Clinical workspace</Link>}</nav><div className="flex items-center gap-2">{user?.role === "patient" && <NotificationBell user={user} />}{user ? <><span className="hidden text-xs text-[var(--muted)] sm:block">{user.name.split(" ")[0]}</span><button type="button" onClick={logout} aria-label="Log out" className="hidden size-9 place-items-center border border-[var(--line)] bg-[var(--card)] hover:border-[var(--brand)] hover:text-[var(--brand)] sm:grid"><LogOut size={16} /></button></> : <Link href="/login" className="hidden text-sm font-semibold hover:text-[var(--brand)] sm:block">Sign in</Link>}<Link href="/doctors" className="hidden bg-[var(--brand)] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[var(--brand-deep)] sm:block">Book appointment</Link><button type="button" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)} className="grid size-9 place-items-center border border-[var(--line)] bg-[var(--card)] md:hidden">{open ? <X size={18} /> : <Menu size={18} />}</button></div></div>{open && <nav className="border-t border-[var(--line)] bg-[var(--card)] px-4 py-4 md:hidden"><Link href="/doctors" className="block border-b border-[var(--line)] py-3 text-sm font-semibold">Find doctors</Link>{user?.role === "patient" && <><Link href="/my-appointments" className="block border-b border-[var(--line)] py-3 text-sm font-semibold">Appointments</Link><Link href="/profile" className="block py-3 text-sm font-semibold">Profile</Link></>}{user?.role === "doctor" && <Link href="/doctor-dashboard" className="block py-3 text-sm font-semibold">Clinical workspace</Link>}{user && <button type="button" onClick={logout} className="mt-3 w-full border border-[var(--line)] py-2.5 text-sm font-semibold">Log out</button>}</nav>}</header>;
+  const logout = () => {
+    clearCurrentUser();
+    setUser(null);
+    setOpen(false);
+  };
+
+  return (
+    <motion.header
+      initial={{ opacity: 0, y: reduceMotion ? 0 : -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 shadow-sm backdrop-blur-xl"
+    >
+      <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-700 text-white shadow-sm shadow-blue-700/20 transition-transform group-hover:scale-105">
+            <Stethoscope size={18} strokeWidth={2.2} />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-editorial text-xl font-bold tracking-tight text-slate-900">
+              Schedula<span className="text-blue-600">.</span>
+            </span>
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-600">
+              Clinical Portal
+            </span>
+          </div>
+        </Link>
+
+        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
+          <Link
+            href="/doctors"
+            className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+          >
+            Find Doctors
+          </Link>
+          {user?.role === "patient" && (
+            <>
+              <Link
+                href="/my-appointments"
+                className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+              >
+                Appointments
+              </Link>
+              <Link
+                href="/profile"
+                className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+              >
+                Health Profile
+              </Link>
+            </>
+          )}
+          {user?.role === "doctor" && (
+            <Link
+              href="/doctor-dashboard"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 font-semibold text-blue-800 transition hover:bg-blue-100"
+            >
+              <CalendarDays size={14} /> Clinical Workspace
+            </Link>
+          )}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {user?.role === "patient" && <NotificationBell user={user} />}
+          <ThemeToggle />
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 sm:inline-flex">
+                <User size={13} className="text-blue-600" />
+                {user.name.split(" ")[0]}
+              </span>
+              <button
+                type="button"
+                onClick={logout}
+                aria-label="Log out"
+                className="grid size-9 place-items-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+              >
+                <LogOut size={15} />
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden rounded-lg px-3.5 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 sm:block"
+            >
+              Sign In
+            </Link>
+          )}
+          <Link
+            href="/doctors"
+              className="brand-shimmer hidden rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-xs font-bold text-white shadow-sm shadow-blue-700/20 transition hover:from-blue-700 hover:to-blue-800 sm:block"
+          >
+            Book Appointment
+          </Link>
+          <button
+            type="button"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+            className="grid size-9 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 md:hidden"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence initial={false}>
+      {open && (
+        <motion.nav
+          initial={{ opacity: 0, height: 0, y: reduceMotion ? 0 : -8 }}
+          animate={{ opacity: 1, height: "auto", y: 0 }}
+          exit={{ opacity: 0, height: 0, y: reduceMotion ? 0 : -6 }}
+          className="overflow-hidden border-t border-slate-200 bg-white px-4 py-4 shadow-lg md:hidden"
+        >
+          <Link
+            href="/doctors"
+            onClick={() => setOpen(false)}
+            className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+          >
+            Find Doctors
+          </Link>
+          {user?.role === "patient" && (
+            <>
+              <Link
+                href="/my-appointments"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Appointments
+              </Link>
+              <Link
+                href="/profile"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Health Profile
+              </Link>
+            </>
+          )}
+          {user?.role === "doctor" && (
+            <Link
+              href="/doctor-dashboard"
+              onClick={() => setOpen(false)}
+              className="block rounded-lg bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-800"
+            >
+              Clinical Workspace
+            </Link>
+          )}
+          {user && (
+            <button
+              type="button"
+              onClick={logout}
+              className="mt-3 w-full rounded-lg border border-slate-200 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Log Out
+            </button>
+          )}
+        </motion.nav>
+      )}
+      </AnimatePresence>
+    </motion.header>
+  );
 }

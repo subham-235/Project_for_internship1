@@ -1,38 +1,138 @@
 @import "tailwindcss";
+@import "react-calendar/dist/Calendar.css";
+@plugin "tailwindcss-animate";
 
-:root {
-  --background: #f7f4ef;
-  --foreground: #12100f;
-  --brand: #e5483b;
-  --brand-deep: #c9362d;
-  --brand-soft: #f2c2a7;
-  --accent: #d96b32;
-  --accent-soft: #f2c2a7;
-  --coral: #e5483b;
-  --amber: #d96b32;
-  --muted: #746e68;
-  --line: #ddd7d0;
-  --card: #ffffff;
-  --ivory: #f7f4ef;
-  --sand: #ddd7d0;
-  --surface-soft: #f7f4ef;
-  --charcoal-deep: #12100f;
-  --success: #d96b32;
-  --danger: #c9362d;
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-status-confirmed: var(--status-confirmed);
+  --color-status-pending: var(--status-pending);
+  --color-status-cancelled: var(--status-cancelled);
+  --color-status-upcoming: var(--status-upcoming);
+  --color-app-background: var(--background);
+  --color-app-surface: var(--card);
+  --radius-card: var(--radius-md);
+  --radius-panel: var(--radius-lg);
+  --shadow-clinical-card: var(--shadow-card);
+  --shadow-clinical-float: var(--shadow-float);
 }
 
-* { box-sizing: border-box; }
+:root {
+  --background: #f8fafc;
+  --foreground: #0b1329;
+  --brand: #2563eb;
+  --brand-deep: #1d4ed8;
+  --brand-soft: #dbeafe;
+  --accent: #6366f1;
+  --accent-soft: #eef2ff;
+  --coral: #ea580c;
+  --amber: #d97706;
+  --emerald: #10b981;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --card: #ffffff;
+  --card-glass: rgba(255, 255, 255, 0.88);
+  --ivory: #f1f5f9;
+  --sand: #e2e8f0;
+  --surface-soft: #f8fafc;
+  --charcoal-deep: #0b1329;
+  --success: #10b981;
+  --danger: #f43f5e;
+  --status-confirmed: #10b981;
+  --status-pending: #f59e0b;
+  --status-cancelled: #f43f5e;
+  --status-upcoming: #0ea5e9;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --shadow-card: 0 1px 2px rgba(11, 19, 41, 0.04), 0 14px 36px -18px rgba(11, 19, 41, 0.22);
+  --shadow-float: 0 24px 70px -28px rgba(11, 19, 41, 0.32);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
 
 html {
   scroll-behavior: smooth;
   background: var(--background);
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --background: #0b1120;
+  --foreground: #f8fafc;
+  --card: #111827;
+  --card-glass: rgba(15, 23, 42, 0.88);
+  --ivory: #0f172a;
+  --surface-soft: #172033;
+  --line: #273449;
+  --muted: #94a3b8;
+  --sand: #334155;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body::before {
+  opacity: 0.72;
+}
+
+html[data-theme="dark"] :is(.glass-panel, .motion-surface) {
+  border-color: rgba(51, 65, 85, 0.8);
+  background: rgba(15, 23, 42, 0.82);
+}
+
+html[data-theme="dark"] :is(.depth-panel, .depth-card, .schedula-calendar.react-calendar) {
+  border-color: var(--line);
+  background: var(--card);
+}
+
+html[data-theme="dark"] :is(.bg-white, [class*="bg-white/"]) {
+  background-color: rgba(17, 24, 39, 0.94) !important;
+}
+
+html[data-theme="dark"] :is(.bg-slate-50, [class*="bg-slate-50/"]) {
+  background-color: rgba(15, 23, 42, 0.88) !important;
+}
+
+html[data-theme="dark"] :is(.text-slate-950, .text-slate-900, .text-slate-800) {
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] :is(.text-slate-700, .text-slate-600, .text-slate-500) {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] :is(.border-slate-200, [class*="border-slate-200/"]) {
+  border-color: #334155 !important;
 }
 
 body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.01em;
+  min-width: 320px;
+  overflow-x: clip;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(circle at 8% 6%, rgba(37, 99, 235, 0.08), transparent 27rem),
+    radial-gradient(circle at 92% 18%, rgba(99, 102, 241, 0.07), transparent 30rem),
+    linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+  background-size: auto, auto, 56px 56px, 56px 56px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
 }
 
 button,
@@ -40,12 +140,25 @@ a,
 input,
 select,
 textarea {
-  transition-duration: 180ms;
-  transition-timing-function: ease-out;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-out-expo);
+}
+
+button:not(:disabled),
+a {
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  accent-color: var(--brand);
 }
 
 button,
-a { -webkit-tap-highlight-color: transparent; }
+a {
+  -webkit-tap-highlight-color: transparent;
+}
 
 button:focus-visible,
 a:focus-visible,
@@ -53,28 +166,293 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--brand);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 ::selection {
   background: var(--brand);
-  color: #F7F4EF;
+  color: #ffffff;
 }
 
 .font-editorial {
-  font-family: var(--font-bricolage), Arial, sans-serif;
-  font-weight: 500;
+  font-family: var(--font-heading), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
 
-.soft-shadow { box-shadow: 0 16px 40px rgba(18, 16, 15, 0.07); }
+.font-heading {
+  font-family: var(--font-heading), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Clinical Glass & Depth panels (shadcn/daisyui inspired) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px -2px rgba(11, 19, 41, 0.05), 0 2px 6px -1px rgba(11, 19, 41, 0.03);
+}
+
+.depth-panel {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+
+.depth-card {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.35s var(--ease-out-expo), border-color 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo);
+}
+
+.depth-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: var(--shadow-float);
+}
+
+.glow-card {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+/* Pulsing live availability indicator */
+.live-pulse-ring {
+  position: relative;
+  display: inline-flex;
+}
+
+.live-pulse-ring::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: var(--emerald);
+  opacity: 0.75;
+  animation: pulse-ring 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  70% { transform: scale(1.7); opacity: 0; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+.clinical-theme {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(37, 99, 235, 0.05), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 30%, rgba(99, 102, 241, 0.04), transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 80%, rgba(16, 185, 129, 0.03), transparent 60%),
+    var(--background);
+}
+
+.clinical-theme main {
+  position: relative;
+  isolation: isolate;
+}
+
+.motion-surface {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+.gradient-text {
+  background: linear-gradient(110deg, var(--brand-deep), var(--accent), var(--brand));
+  background-clip: text;
+  color: transparent;
+}
+
+.interactive-lift {
+  transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo);
+}
+
+.interactive-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-float);
+}
+
+@keyframes schedula-shimmer {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(220%); }
+}
+
+@keyframes skeleton-shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes toast-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+[data-sonner-toast] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-sonner-toast]::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  content: "";
+  transform-origin: left;
+  background: var(--brand);
+  animation: toast-progress 4s linear forwards;
+}
+
+.brand-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-shimmer::after {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 35%;
+  content: "";
+  transform: translateX(-120%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.brand-shimmer:hover::after {
+  animation: schedula-shimmer 0.85s var(--ease-out-expo);
+}
+
+.soft-shadow {
+  box-shadow: 0 12px 32px -4px rgba(11, 19, 41, 0.06), 0 4px 12px -2px rgba(11, 19, 41, 0.03);
+}
 
 .warm-scrollbar {
-  scrollbar-color: var(--sand) transparent;
+  scrollbar-color: #cbd5e1 transparent;
   scrollbar-width: thin;
 }
 
+/* Schedula Clinical Calendar Styling */
+.schedula-calendar.react-calendar {
+  width: 100%;
+  max-width: none;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 1rem;
+  box-shadow: 0 8px 24px -4px rgba(11, 19, 41, 0.05);
+  font-family: inherit;
+}
+
+.schedula-calendar .react-calendar__navigation {
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.schedula-calendar .react-calendar__navigation button {
+  min-width: 2.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--foreground);
+  transition: all 0.2s ease;
+}
+
+.schedula-calendar .react-calendar__navigation button:enabled:hover,
+.schedula-calendar .react-calendar__navigation button:enabled:focus,
+.schedula-calendar .react-calendar__tile:enabled:hover,
+.schedula-calendar .react-calendar__tile:enabled:focus {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.schedula-calendar .react-calendar__month-view__weekdays {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 0.5rem;
+}
+
+.schedula-calendar .react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+.schedula-calendar .react-calendar__tile {
+  min-height: 3.5rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.schedula-calendar .react-calendar__tile--now {
+  background: #f0fdf4;
+  color: #15803d;
+  font-weight: 700;
+  border: 1px solid #bbf7d0;
+}
+
+.schedula-calendar .react-calendar__tile--active {
+  background: var(--brand) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.schedula-calendar .schedula-calendar__patient-date {
+  background: #eff6ff;
+  color: #1d4ed8;
+  box-shadow: inset 0 0 0 2px var(--brand);
+  font-weight: 800;
+}
+
+.schedula-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  opacity: 0.3;
+}
+
+/* Schedula Marquee */
+@keyframes schedula-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.schedula-marquee {
+  animation: schedula-marquee 32s linear infinite;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .schedula-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 
   *,
   *::before,
