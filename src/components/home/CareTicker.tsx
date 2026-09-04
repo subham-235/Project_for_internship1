@@ -24,7 +24,7 @@ export default function CareTicker() {
 
   return (
     <div className="border-y border-slate-200 bg-white" aria-label="Hospital networks and metrics">
-      {/* Top Hospitals Affiliation Line */}
+      {}
       <div className="border-b border-slate-100 bg-slate-50/60 py-2.5">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <span className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-slate-600 sm:block hidden">
@@ -41,7 +41,7 @@ export default function CareTicker() {
         </div>
       </div>
 
-      {/* Dynamic Animated Pulse Marquee */}
+      {}
       <div className="overflow-hidden bg-gradient-to-r from-blue-900 via-slate-900 to-cyan-950 py-3 text-white">
         <div className="schedula-marquee flex w-max items-center">
           {repeatedMetrics.map((item, index) => {

@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -67,6 +67,12 @@ export default function DoctorPrescriptionsPage() {
   const [formBookingId, setFormBookingId] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [treatmentGoal, setTreatmentGoal] = useState("");
+  const [selfCareInstructions, setSelfCareInstructions] = useState("");
+  const [recommendedTests, setRecommendedTests] = useState("");
+  const [warningSigns, setWarningSigns] = useState("");
+  const [followUpDate, setFollowUpDate] = useState("");
+  const [followUpNotes, setFollowUpNotes] = useState("");
   const [medicines, setMedicines] = useState<PrescriptionMedicine[]>([emptyMedicine()]);
   const [formError, setFormError] = useState("");
   const [message, setMessage] = useState("");
@@ -93,14 +99,28 @@ export default function DoctorPrescriptionsPage() {
       })
       .filter((item): item is PrescriptionRecord => item !== null)
       .sort((a, b) => new Date(b.prescription.updatedAt ?? b.prescription.createdAt).getTime() - new Date(a.prescription.updatedAt ?? a.prescription.createdAt).getTime());
-    setCompletedBookings(
-      getBookingsForDoctor(doctor.id, doctor.name).filter(
-        (booking) => booking.status === "completed",
-      ),
+    const completed = getBookingsForDoctor(doctor.id, doctor.name).filter(
+      (booking) => booking.status === "completed",
     );
+    setCompletedBookings(completed);
     setProfile(doctor);
     setRecords(items);
     setSelectedId(items[0]?.prescription.id ?? "");
+    const query = new URLSearchParams(window.location.search);
+    const requestedBookingId = query.get("bookingId");
+    if (query.get("create") === "1" && requestedBookingId && completed.some((booking) => booking.id === requestedBookingId)) {
+      setFormBookingId(requestedBookingId);
+      setDiagnosis("");
+      setInstructions("");
+      setTreatmentGoal("");
+      setSelfCareInstructions("");
+      setRecommendedTests("");
+      setWarningSigns("");
+      setFollowUpDate("");
+      setFollowUpNotes("");
+      setMedicines([emptyMedicine()]);
+      setFormOpen(true);
+    }
     setLoading(false);
   }, [router]);
 
@@ -138,6 +158,12 @@ export default function DoctorPrescriptionsPage() {
     setFormBookingId(withoutPrescription?.id ?? completedBookings[0]?.id ?? "");
     setDiagnosis("");
     setInstructions("");
+    setTreatmentGoal("");
+    setSelfCareInstructions("");
+    setRecommendedTests("");
+    setWarningSigns("");
+    setFollowUpDate("");
+    setFollowUpNotes("");
     setMedicines([emptyMedicine()]);
     setFormError("");
     setFormOpen(true);
@@ -157,6 +183,12 @@ export default function DoctorPrescriptionsPage() {
     setFormBookingId(record.booking.id);
     setDiagnosis(record.prescription.diagnosis);
     setInstructions(record.prescription.notes);
+    setTreatmentGoal(record.prescription.carePlan?.treatmentGoal ?? "");
+    setSelfCareInstructions(record.prescription.carePlan?.selfCareInstructions ?? "");
+    setRecommendedTests(record.prescription.carePlan?.recommendedTests ?? "");
+    setWarningSigns(record.prescription.carePlan?.warningSigns ?? "");
+    setFollowUpDate(record.prescription.carePlan?.followUpDate ?? "");
+    setFollowUpNotes(record.prescription.carePlan?.followUpNotes ?? "");
     setMedicines(existingMedicines.length ? existingMedicines : [emptyMedicine()]);
     setFormError("");
     setFormOpen(true);
@@ -198,6 +230,10 @@ export default function DoctorPrescriptionsPage() {
       setFormError("Add at least one medicine.");
       return;
     }
+    if (!treatmentGoal.trim() || !selfCareInstructions.trim() || !warningSigns.trim()) {
+      setFormError("Treatment goal, self-care instructions and warning signs are required for the care plan.");
+      return;
+    }
     if (cleanedMedicines.some((medicine) => !medicine.dosage || !medicine.duration)) {
       setFormError("Dosage and duration are required for every medicine.");
       return;
@@ -220,6 +256,15 @@ export default function DoctorPrescriptionsPage() {
           .join(" - "),
       ),
       notes: instructions.trim(),
+      carePlan: {
+        treatmentGoal: treatmentGoal.trim(),
+        selfCareInstructions: selfCareInstructions.trim(),
+        recommendedTests: recommendedTests.trim(),
+        warningSigns: warningSigns.trim(),
+        followUpDate,
+        followUpNotes: followUpNotes.trim(),
+        publishedAt: now,
+      },
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
@@ -386,9 +431,21 @@ export default function DoctorPrescriptionsPage() {
                 <textarea rows={4} value={instructions} onChange={(event) => setInstructions(event.target.value)} placeholder="Diet, activity, follow-up, warning signs, or other care instructions" className="mt-2 w-full resize-none rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm leading-6 outline-none focus:border-[var(--brand)]" />
               </label>
 
+              <section className="rounded-2xl border border-blue-200 bg-blue-50/50 p-4 sm:p-5">
+                <div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-blue-700">Structured care plan</p><h3 className="mt-1 text-base font-bold text-slate-900">Recovery and follow-up plan</h3><p className="mt-1 text-xs leading-5 text-slate-500">This plan is published with the prescription and becomes visible in the patient portal.</p></div>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <label className="sm:col-span-2"><span className="text-xs font-bold text-slate-700">Treatment goal *</span><input value={treatmentGoal} onChange={(event) => setTreatmentGoal(event.target.value)} placeholder="For example: Control fever and restore normal hydration" className="mt-2 w-full rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500" /></label>
+                  <label><span className="text-xs font-bold text-slate-700">Self-care instructions *</span><textarea rows={4} value={selfCareInstructions} onChange={(event) => setSelfCareInstructions(event.target.value)} placeholder="Rest, hydration, diet and activity guidance" className="mt-2 w-full resize-none rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-blue-500" /></label>
+                  <label><span className="text-xs font-bold text-slate-700">Warning signs *</span><textarea rows={4} value={warningSigns} onChange={(event) => setWarningSigns(event.target.value)} placeholder="Symptoms that require urgent review" className="mt-2 w-full resize-none rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-rose-500" /></label>
+                  <label><span className="text-xs font-bold text-slate-700">Recommended tests</span><textarea rows={3} value={recommendedTests} onChange={(event) => setRecommendedTests(event.target.value)} placeholder="Tests, imaging or monitoring instructions" className="mt-2 w-full resize-none rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-blue-500" /></label>
+                  <label><span className="text-xs font-bold text-slate-700">Follow-up instructions</span><textarea rows={3} value={followUpNotes} onChange={(event) => setFollowUpNotes(event.target.value)} placeholder="What to bring and what will be reviewed" className="mt-2 w-full resize-none rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-blue-500" /></label>
+                  <label><span className="text-xs font-bold text-slate-700">Follow-up date</span><input type="date" value={followUpDate} onChange={(event) => setFollowUpDate(event.target.value)} className="mt-2 w-full rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500" /></label>
+                </div>
+              </section>
+
               <div className="flex flex-col-reverse gap-2 border-t border-[#E2E8F0] pt-5 sm:flex-row sm:justify-end">
                 <button type="button" onClick={() => setFormOpen(false)} className="rounded-xl border border-[#E2E8F0] px-5 py-3 text-sm font-semibold">Cancel</button>
-                <button type="button" onClick={saveForm} disabled={!completedBookings.length} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-deep)] disabled:cursor-not-allowed disabled:opacity-50"><Save size={16} />{editingId ? "Update prescription" : "Save prescription"}</button>
+                <button type="button" onClick={saveForm} disabled={!completedBookings.length} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-deep)] disabled:cursor-not-allowed disabled:opacity-50"><Save size={16} />{editingId ? "Update care plan" : "Publish prescription & care plan"}</button>
               </div>
             </div>
           </section>

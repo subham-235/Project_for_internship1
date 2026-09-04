@@ -20,9 +20,9 @@ export type StoredMedicalFile = {
 };
 
 
-/* =========================================
-   OPEN DATABASE
-========================================= */
+
+
+
 
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise(
@@ -94,9 +94,9 @@ function openDatabase(): Promise<IDBDatabase> {
 }
 
 
-/* =========================================
-   SAVE MEDICAL FILE
-========================================= */
+
+
+
 
 export async function saveMedicalFile(
   id: string,
@@ -196,9 +196,9 @@ export async function saveMedicalFile(
 }
 
 
-/* =========================================
-   GET MEDICAL FILE
-========================================= */
+
+
+
 
 export async function getMedicalFile(
   id: string
@@ -273,9 +273,9 @@ export async function getMedicalFile(
 }
 
 
-/* =========================================
-   DELETE MEDICAL FILE
-========================================= */
+
+
+
 
 export async function deleteMedicalFile(
   id: string
@@ -342,9 +342,9 @@ export async function deleteMedicalFile(
 }
 
 
-/* =========================================
-   VIEW FILE
-========================================= */
+
+
+
 
 export async function viewMedicalFile(
   id: string
@@ -387,9 +387,9 @@ export async function viewMedicalFile(
 }
 
 
-/* =========================================
-   DOWNLOAD FILE
-========================================= */
+
+
+
 
 export async function downloadMedicalFile(
   id: string

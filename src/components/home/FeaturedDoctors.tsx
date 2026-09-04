@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, UserCheck } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import DoctorCard from "@/components/doctors/DoctorCard";
@@ -11,6 +12,7 @@ import { applyDoctorReviewStats, getDoctorReviews, getRegisteredDoctors } from "
 import type { Doctor } from "@/types/doctor";
 
 export default function FeaturedDoctors() {
+  const reduceMotion = useReducedMotion();
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", dragFree: true });
   const [doctorList, setDoctorList] = useState<Doctor[]>(doctors.slice(0, 6));
 
@@ -79,13 +81,18 @@ export default function FeaturedDoctors() {
 
         <div ref={emblaRef} className="mt-10 overflow-hidden" aria-roledescription="carousel">
           <div className="flex touch-pan-y gap-6">
-            {doctorList.map((doctor) => (
-              <div
+            {doctorList.map((doctor, index) => (
+              <motion.div
                 key={doctor.id}
+                initial={reduceMotion ? false : { opacity: 0, y: 30, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.18 }}
+                transition={{ duration: 0.55, delay: reduceMotion ? 0 : Math.min(index, 3) * 0.09, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={reduceMotion ? undefined : { y: -5 }}
                 className="min-w-0 flex-[0_0_92%] sm:flex-[0_0_48%] lg:flex-[0_0_calc(33.333%-16px)]"
               >
                 <DoctorCard doctor={doctor} />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

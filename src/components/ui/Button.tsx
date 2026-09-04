@@ -23,10 +23,10 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-9 rounded-xl px-3.5 text-sm",
-  md: "h-11 rounded-xl px-5 text-sm",
-  lg: "h-12 rounded-2xl px-6 text-[15px]",
-  icon: "size-11 rounded-xl",
+  sm: "h-9 rounded-full px-3.5 text-sm",
+  md: "h-11 rounded-full px-5 text-sm",
+  lg: "h-12 rounded-full px-6 text-[15px]",
+  icon: "size-11 rounded-full",
 };
 
 export default function Button({

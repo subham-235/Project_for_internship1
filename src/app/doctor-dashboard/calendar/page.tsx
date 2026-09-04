@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import Link from "next/link";
 
@@ -18,10 +18,12 @@ import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
+  CheckCircle2,
   Clock3,
   Mail,
   MapPin,
   Phone,
+  Plus,
   Stethoscope,
   UserRound,
   X,
@@ -40,12 +42,14 @@ import type {
 } from "@/types/availability";
 
 import {
+  confirmBooking,
   getBookingsForDoctor,
   getCurrentUser,
   getDoctorSlots,
   getRegisteredDoctors,
   mergeDoctorProfiles,
   rescheduleBooking,
+  saveDoctorSlot,
   type StoredUser,
 } from "@/lib/client-storage";
 
@@ -54,6 +58,8 @@ import {
 } from "@/lib/mock-data/doctors";
 
 import StatusBadge from "@/components/appointments/StatusBadge";
+import PatientHealthSnapshot from "@/components/doctor/PatientHealthSnapshot";
+import PatientIntakeSummary from "@/components/doctor/PatientIntakeSummary";
 
 
 const calendarStatusStyles = {
@@ -241,6 +247,20 @@ function formatShortDate(
 }
 
 
+function displayTime(
+  value: string
+) {
+  const [hourValue, minute] = value.split(":");
+  let hour = Number(hourValue);
+  const period = hour >= 12 ? "PM" : "AM";
+
+  if (hour === 0) hour = 12;
+  else if (hour > 12) hour -= 12;
+
+  return `${String(hour).padStart(2, "0")}:${minute} ${period}`;
+}
+
+
 function isDraggable(
   booking: Booking
 ) {
@@ -320,6 +340,9 @@ export default function DoctorCalendarPage() {
     useState<Booking | null>(
       null
     );
+
+  const [customSlotTime, setCustomSlotTime] = useState("");
+  const [slotError, setSlotError] = useState("");
 
 
   const load =
@@ -484,6 +507,58 @@ export default function DoctorCalendarPage() {
         3500
       );
     };
+
+
+  const createCustomSlot = () => {
+    setSlotError("");
+
+    if (!profile || !customSlotTime) {
+      setSlotError("Choose a time for the new slot.");
+      return;
+    }
+
+    const date = dateKey(cursor);
+    const startsAt = new Date(`${date}T${customSlotTime}:00`);
+
+    if (startsAt.getTime() <= Date.now()) {
+      setSlotError("The custom slot must be in the future.");
+      return;
+    }
+
+    const saved = saveDoctorSlot({
+      id: `slot-${profile.id}-${Date.now()}`,
+      doctorId: profile.id,
+      date,
+      time: displayTime(customSlotTime),
+      status: "available",
+      createdAt: new Date().toISOString(),
+    });
+
+    if (!saved) {
+      setSlotError("A slot already exists at this time.");
+      return;
+    }
+
+    setCustomSlotTime("");
+    setMessage(`Custom slot added for ${formatShortDate(cursor)}.`);
+    load();
+  };
+
+
+  const confirmSelectedBooking = () => {
+    if (!selectedBooking || selectedBooking.status !== "pending") return;
+
+    const updated = confirmBooking(selectedBooking.id);
+
+    if (!updated) {
+      setMessage("Unable to confirm this appointment.");
+      return;
+    }
+
+    setSelectedBooking(updated);
+    setMessage(`Appointment with ${updated.patientName} confirmed.`);
+    load();
+  };
 
 
   const renderBooking =
@@ -917,19 +992,23 @@ export default function DoctorCalendarPage() {
 
         {view ===
           "day" && (
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
 
-            <section className="rounded-xl border border-[var(--line)] bg-white p-5">
+            <section className="rounded-2xl border border-[var(--line)] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
 
-              <h2 className="flex items-center gap-2 font-semibold">
-                <CalendarDays
-                  size={
-                    18
-                  }
-                />
-
-                Appointments
-              </h2>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h2 className="flex items-center gap-2 font-bold">
+                    <CalendarDays size={18} className="text-[var(--brand)]" />
+                    Daily appointments
+                  </h2>
+                  <p className="mt-1 text-xs text-[var(--muted)]">Pending, confirmed and completed visits for this date.</p>
+                </div>
+                <div className="flex gap-2 text-[10px] font-bold">
+                  <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-700">{dayBookings.filter((item) => item.status === "pending").length} pending</span>
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-700">{dayBookings.filter((item) => item.status === "confirmed").length} confirmed</span>
+                </div>
+              </div>
 
               <div className="mt-4 space-y-3">
 
@@ -949,17 +1028,39 @@ export default function DoctorCalendarPage() {
             </section>
 
 
-            <section className="rounded-xl border border-[var(--line)] bg-white p-5">
+            <section className="rounded-2xl border border-[var(--line)] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
 
-              <h2 className="font-semibold">
-                Availability
-              </h2>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 className="font-bold">Day availability</h2>
+                  <p className="mt-1 text-xs text-[var(--muted)]">{daySlots.filter((item) => item.status === "available").length} open slots on this date.</p>
+                </div>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-blue-700">{daySlots.length} total</span>
+              </div>
 
-              <p className="mt-1 text-xs text-[var(--muted)]">
-                Drop a confirmed appointment onto an orange available slot.
-              </p>
+              <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50/60 p-4">
+                <p className="flex items-center gap-2 text-xs font-bold text-slate-900"><Plus size={15} className="text-blue-600" /> Add a custom slot</p>
+                <div className="mt-3 flex gap-2">
+                  <input
+                    type="time"
+                    value={customSlotTime}
+                    onChange={(event) => {
+                      setCustomSlotTime(event.target.value);
+                      setSlotError("");
+                    }}
+                    aria-label="Custom slot time"
+                    className="min-w-0 flex-1 rounded-xl border border-blue-200 bg-white px-3 py-2.5 text-sm font-semibold outline-none focus:border-blue-500"
+                  />
+                  <button type="button" onClick={createCustomSlot} className="rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-700">
+                    Create slot
+                  </button>
+                </div>
+                {slotError && <p role="alert" className="mt-2 text-xs font-semibold text-rose-600">{slotError}</p>}
+              </div>
 
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">All slots</p>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
 
                 {daySlots.length >
                 0 ? (
@@ -1274,7 +1375,7 @@ export default function DoctorCalendarPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="calendar-appointment-title"
-            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-[18px] bg-white shadow-2xl"
+            className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[22px] bg-white shadow-2xl"
           >
             <div
               className={`border-b p-5 ${
@@ -1344,7 +1445,9 @@ export default function DoctorCalendarPage() {
                 }
               </span>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="mt-5 grid items-start gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+                <div>
+              <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl bg-[#F8FAFC] p-4">
                   <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
                     <CalendarDays
@@ -1400,8 +1503,8 @@ export default function DoctorCalendarPage() {
                 </p>
               </div>
 
-              <dl className="mt-5 space-y-4 text-sm">
-                <div className="flex items-center gap-3">
+              <dl className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                <div className="flex min-w-0 items-center gap-3 rounded-xl bg-slate-50 p-3">
                   <Mail
                     size={16}
                     className="text-[var(--brand)]"
@@ -1412,7 +1515,7 @@ export default function DoctorCalendarPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3 rounded-xl bg-slate-50 p-3">
                   <Phone
                     size={16}
                     className="text-[var(--brand)]"
@@ -1423,7 +1526,7 @@ export default function DoctorCalendarPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3 rounded-xl bg-slate-50 p-3">
                   <MapPin
                     size={16}
                     className="text-[var(--brand)]"
@@ -1434,6 +1537,15 @@ export default function DoctorCalendarPage() {
                   </div>
                 </div>
               </dl>
+                </div>
+
+              <div>
+                <PatientHealthSnapshot booking={selectedBooking} />
+                <div className="mt-4">
+                  <PatientIntakeSummary booking={selectedBooking} />
+                </div>
+              </div>
+              </div>
 
               {isDraggable(
                 selectedBooking
@@ -1441,6 +1553,20 @@ export default function DoctorCalendarPage() {
                 <p className="mt-5 rounded-xl bg-[#F8FAFC] px-4 py-3 text-xs font-semibold leading-5 text-[#C9362D]">
                   Drag this appointment to any dashed orange available slot to reschedule it.
                 </p>
+              )}
+
+              {selectedBooking.status === "pending" && !selectedBooking.rescheduleApprovalPending && (
+                <div className="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs leading-5 text-slate-500">Confirming reserves this visit and notifies the patient immediately.</p>
+                  <button
+                    type="button"
+                    onClick={confirmSelectedBooking}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 hover:bg-emerald-700"
+                  >
+                    <CheckCircle2 size={17} />
+                    Confirm appointment
+                  </button>
+                </div>
               )}
             </div>
           </section>

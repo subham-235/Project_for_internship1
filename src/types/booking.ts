@@ -9,8 +9,55 @@ export type BookingAttachment = {
   type: string;
   size: number;
 
-  // Compatibility with old localStorage bookings
+
   dataUrl?: string;
+};
+
+export type BookingPayment = {
+  method: "upi" | "card";
+  status: "paid";
+  amount: number;
+  transactionId: string;
+  paidAt: string;
+};
+
+export type BookingPatientProfile = {
+  dateOfBirth: string;
+  gender: string;
+  bloodGroup: string;
+  heightCm: string;
+  weightKg: string;
+  medicalConditions: string;
+  allergies: string;
+  currentMedications: string;
+  emergencyContactName: string;
+  emergencyContactPhone: string;
+  emergencyContactRelation: string;
+  updatedAt: string;
+};
+
+export type BookingIntakeAnswer = {
+  questionId: string;
+  label: string;
+  value: string;
+};
+
+export type BookingIntake = {
+  specialty: string;
+  primaryConcern: string;
+  symptomDuration: string;
+  severity: "mild" | "moderate" | "severe";
+  answers: BookingIntakeAnswer[];
+  consentToShare: boolean;
+  completedAt: string;
+};
+
+export type BookingQueue = {
+  token: string;
+  status: "waiting" | "in_consultation" | "completed";
+  checkedInAt: string;
+  consultationStartedAt?: string;
+  completedAt?: string;
 };
 
 
@@ -38,6 +85,9 @@ export type Booking = {
   patientEmail: string;
   patientPhone: string;
   patientAge: number;
+  patientProfile?: BookingPatientProfile;
+  intake?: BookingIntake;
+  queue?: BookingQueue;
 
   reason: string;
 
@@ -48,6 +98,8 @@ export type Booking = {
   startsAt: string;
 
   fee: number;
+
+  payment?: BookingPayment;
 
   status: BookingStatus;
 

@@ -1,12 +1,11 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ArrowRight,
-  Bell,
   CalendarDays,
   CheckCircle2,
   ChevronRight,
@@ -54,7 +53,8 @@ import DoctorCommandPalette from "@/components/doctor/DoctorCommandPalette";
 import EmptyState from "@/components/ui/EmptyState";
 import Skeleton from "@/components/ui/Skeleton";
 import StatCard from "@/components/ui/StatCard";
-import ThemeToggle from "@/components/ui/ThemeToggle";
+import DoctorLiveQueue from "@/components/doctor/DoctorLiveQueue";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const navigation = [
   { label: "Overview", href: "/doctor-dashboard", icon: LayoutDashboard },
@@ -277,11 +277,12 @@ export default function DoctorDashboardPage() {
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
               <DoctorCommandPalette bookings={bookings} onSelect={setSelectedPatient} />
-              <ThemeToggle className="size-10" />
-              <button type="button" aria-label="Notifications" className="relative grid size-10 place-items-center rounded-xl border border-[#E2E8F0] bg-white text-[#64748B] hover:border-[#E2E8F0]">
-                <Bell size={18} />
-                {pending > 0 && <span className="absolute right-2 top-2 size-2 rounded-full bg-[#2563eb] ring-2 ring-white" />}
-              </button>
+              <NotificationBell
+                user={user}
+                href="/doctor-dashboard/appointments"
+                reminders={false}
+                className="size-10"
+              />
               <div className="hidden h-8 w-px bg-[#E2E8F0] sm:block" />
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-semibold">{profile.name}</p>
@@ -317,6 +318,10 @@ export default function DoctorDashboardPage() {
           </section>
 
           <DashboardAnalytics bookings={bookings} />
+
+          <div className="mt-6">
+            <DoctorLiveQueue bookings={bookings} onRefresh={() => loadDashboard(profile)} />
+          </div>
 
           <section className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(19rem,0.75fr)]">
             <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_8px_24px_rgba(11,19,41,0.04)]">
@@ -367,8 +372,7 @@ export default function DoctorDashboardPage() {
               )}
             </div>
 
-            <div className="space-y-6">
-              <article className="rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
+            <article className="h-fit rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#64748B]">Up next</p>
@@ -401,8 +405,10 @@ export default function DoctorDashboardPage() {
                     <p className="mt-1 text-xs text-[#64748B]">Enjoy the quiet moment.</p>
                   </div>
                 )}
-              </article>
+            </article>
+          </section>
 
+          <section className="mt-6 grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.65fr)_minmax(19rem,0.75fr)]">
               <article className="rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -427,9 +433,10 @@ export default function DoctorDashboardPage() {
                 )}
               </article>
 
-              <article className="rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
+              <article className="flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_rgba(11,19,41,0.04)] sm:p-6">
                 <h2 className="text-base font-bold">Quick actions</h2>
-                <div className="mt-4 grid grid-cols-2 gap-3">
+                <p className="mt-1 text-xs text-[#64748B]">Common workspace shortcuts</p>
+                <div className="mt-4 grid flex-1 auto-rows-fr grid-cols-2 gap-3">
                   <Link href="/doctor-dashboard/profile" className="rounded-xl border border-[#E2E8F0] p-3.5 hover:border-[#E2E8F0] hover:bg-[#F8FAFC]">
                     <div className="grid size-9 place-items-center rounded-lg bg-[#dbeafe] text-[#2563eb]"><Plus size={17} /></div>
                     <p className="mt-3 text-xs font-bold">Add slots</p>
@@ -440,10 +447,19 @@ export default function DoctorDashboardPage() {
                     <p className="mt-3 text-xs font-bold">Patients</p>
                     <p className="mt-1 text-[11px] text-[#64748B]">Review details</p>
                   </Link>
+                  <Link href="/doctor-dashboard/calendar" className="rounded-xl border border-[#E2E8F0] p-3.5 hover:border-[#2563eb] hover:bg-[#F8FAFC]">
+                    <div className="grid size-9 place-items-center rounded-lg bg-emerald-50 text-emerald-600"><CalendarDays size={17} /></div>
+                    <p className="mt-3 text-xs font-bold">Calendar</p>
+                    <p className="mt-1 text-[11px] text-[#64748B]">Manage schedule</p>
+                  </Link>
+                  <Link href="/doctor-dashboard/prescriptions" className="rounded-xl border border-[#E2E8F0] p-3.5 hover:border-[#2563eb] hover:bg-[#F8FAFC]">
+                    <div className="grid size-9 place-items-center rounded-lg bg-violet-50 text-violet-600"><Pill size={17} /></div>
+                    <p className="mt-3 text-xs font-bold">Prescriptions</p>
+                    <p className="mt-1 text-[11px] text-[#64748B]">Clinical records</p>
+                  </Link>
                 </div>
               </article>
-            </div>
-          </section>
+            </section>
         </div>
       </div>
 

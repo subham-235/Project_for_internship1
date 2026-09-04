@@ -6,6 +6,16 @@ export type PrescriptionMedicine = {
   instructions: string;
 };
 
+export type StructuredCarePlan = {
+  treatmentGoal: string;
+  selfCareInstructions: string;
+  recommendedTests: string;
+  warningSigns: string;
+  followUpDate: string;
+  followUpNotes: string;
+  publishedAt: string;
+};
+
 export type Prescription = {
   id: string;
 
@@ -21,9 +31,11 @@ export type Prescription = {
 
   medications: string[];
 
-  // Structured medicine details used by the Day 4 prescription workflow.
-  // The legacy medications array is retained for existing saved records.
+
+
   medicines?: PrescriptionMedicine[];
+
+  carePlan?: StructuredCarePlan;
 
   notes: string;
 

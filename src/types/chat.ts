@@ -7,4 +7,15 @@ export type ChatTurn = {
 
 export type ChatMessage = ChatTurn & {
   id: string;
+  doctorIds?: string[];
+  links?: ChatLink[];
+  suggestedPrompts?: string[];
+};
+
+export type ChatAudience = "patient" | "doctor";
+
+export type ChatLink = {
+  label: string;
+  href: string;
+  description: string;
 };

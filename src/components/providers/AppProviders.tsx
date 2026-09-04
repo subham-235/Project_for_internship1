@@ -2,14 +2,9 @@
 
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Toaster } from "sonner";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
-  useEffect(() => {
-    const savedTheme = window.localStorage.getItem("schedula-theme");
-    document.documentElement.dataset.theme = savedTheme ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  }, []);
-
   return (
     <Tooltip.Provider delayDuration={250} skipDelayDuration={100}>
       {children}

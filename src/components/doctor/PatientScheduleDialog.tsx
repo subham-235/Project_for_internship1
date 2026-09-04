@@ -2,13 +2,15 @@
 
 import Calendar from "react-calendar";
 import { useState } from "react";
-import { CalendarDays, Clock3, Mail, Phone, RefreshCcw, Stethoscope, UserRound, X, XCircle } from "lucide-react";
+import { CalendarDays, CheckCircle2, Clock3, Mail, Phone, RefreshCcw, Stethoscope, UserRound, X, XCircle } from "lucide-react";
 import StatusBadge from "@/components/appointments/StatusBadge";
 import type { DoctorSlot } from "@/types/availability";
 import type { Booking, BookingStatus } from "@/types/booking";
 import { formatAppointmentFullDate, formatAppointmentTime } from "@/lib/appointment-utils";
-import { cancelBooking, rescheduleBooking } from "@/lib/client-storage";
+import { cancelBooking, confirmBooking, rescheduleBooking } from "@/lib/client-storage";
 import { toast } from "sonner";
+import PatientHealthSnapshot from "@/components/doctor/PatientHealthSnapshot";
+import PatientIntakeSummary from "@/components/doctor/PatientIntakeSummary";
 
 const statusOrder: BookingStatus[] = ["confirmed", "pending", "cancelled", "completed", "missed"];
 
@@ -45,7 +47,7 @@ export default function PatientScheduleDialog({
   onUpdated: (booking: Booking) => void;
 }) {
   const [selectedDate, setSelectedDate] = useState(booking.date);
-  const [confirmation, setConfirmation] = useState<{ type: "cancel" } | { type: "reschedule"; slot: DoctorSlot } | null>(null);
+  const [confirmation, setConfirmation] = useState<{ type: "confirm" } | { type: "cancel" } | { type: "reschedule"; slot: DoctorSlot } | null>(null);
   const [message, setMessage] = useState("");
   const [openedAt] = useState(() => Date.now());
 
@@ -63,9 +65,11 @@ export default function PatientScheduleDialog({
   const applyAction = () => {
     if (!confirmation) return;
 
-    const updated = confirmation.type === "cancel"
-      ? cancelBooking(booking.id)
-      : rescheduleBooking(booking.id, confirmation.slot.id);
+    const updated = confirmation.type === "confirm"
+      ? confirmBooking(booking.id)
+      : confirmation.type === "cancel"
+        ? cancelBooking(booking.id)
+        : rescheduleBooking(booking.id, confirmation.slot.id);
 
     setConfirmation(null);
     if (!updated) {
@@ -76,11 +80,15 @@ export default function PatientScheduleDialog({
 
     setSelectedDate(updated.date);
     setMessage(
-      confirmation.type === "cancel"
-        ? "Appointment cancelled. The patient has been notified."
-        : "New time proposed. The appointment is pending patient approval.",
+      confirmation.type === "confirm"
+        ? "Appointment confirmed. The patient has been notified."
+        : confirmation.type === "cancel"
+          ? "Appointment cancelled. The patient has been notified."
+          : "New time proposed. The appointment is pending patient approval.",
     );
-    if (confirmation.type === "cancel") {
+    if (confirmation.type === "confirm") {
+      toast.success("Appointment confirmed", { description: "The patient has been notified of the confirmed visit." });
+    } else if (confirmation.type === "cancel") {
       toast.success("Appointment cancelled", { description: "The patient has been notified and the slot was released." });
     } else {
       toast.success("New time sent for approval", { description: "The appointment stays pending until the patient confirms." });
@@ -106,7 +114,12 @@ export default function PatientScheduleDialog({
           <aside className="border-b border-slate-200 bg-white p-5 sm:p-7 lg:border-b-0 lg:border-r">
             <div className="flex items-center justify-between gap-3">
               <h3 className="font-editorial text-xl font-bold text-slate-900">Patient Details</h3>
-              <StatusBadge status={booking.status} />
+              <div className="flex items-center gap-2">
+                <StatusBadge status={booking.status} />
+                {booking.status === "pending" && (
+                  <button type="button" onClick={() => setConfirmation({ type: "confirm" })} className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1.5 text-[10px] font-bold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-700"><CheckCircle2 size={13} /> Confirm</button>
+                )}
+              </div>
             </div>
 
             <dl className="mt-6 space-y-4 text-xs font-semibold text-slate-700">
@@ -119,6 +132,14 @@ export default function PatientScheduleDialog({
             <div className="mt-6 rounded-2xl bg-slate-50 p-4 border border-slate-100">
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Reason for Visit</p>
               <p className="mt-1.5 text-xs leading-relaxed text-slate-700 font-medium">{booking.reason}</p>
+            </div>
+
+            <div className="mt-4">
+              <PatientHealthSnapshot booking={booking} compact />
+            </div>
+
+            <div className="mt-4">
+              <PatientIntakeSummary booking={booking} compact />
             </div>
 
             <div className="mt-4 rounded-2xl border-2 border-blue-500/80 bg-blue-50/80 p-4">
@@ -184,12 +205,12 @@ export default function PatientScheduleDialog({
           <div className="border-t border-slate-200 bg-white px-5 sm:px-7">
             <div className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-bold text-slate-900">{confirmation.type === "cancel" ? "Cancel this appointment?" : "Propose this new appointment time?"}</p>
-                <p className="mt-1 text-xs leading-5 text-slate-500">{confirmation.type === "cancel" ? "The slot will be released and the patient will be notified via SMS." : `${confirmation.slot.date} at ${confirmation.slot.time} will be reserved. The patient will receive a notification to confirm.`}</p>
+                <p className="text-sm font-bold text-slate-900">{confirmation.type === "confirm" ? "Confirm this appointment?" : confirmation.type === "cancel" ? "Cancel this appointment?" : "Propose this new appointment time?"}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">{confirmation.type === "confirm" ? "The visit will be marked as confirmed and the patient will be notified immediately." : confirmation.type === "cancel" ? "The slot will be released and the patient will be notified via SMS." : `${confirmation.slot.date} at ${confirmation.slot.time} will be reserved. The patient will receive a notification to confirm.`}</p>
               </div>
               <div className="flex shrink-0 gap-2">
                 <button type="button" onClick={() => setConfirmation(null)} className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50">Go back</button>
-                <button type="button" onClick={applyAction} className={`rounded-xl px-4 py-2 text-xs font-bold text-white shadow-sm ${confirmation.type === "cancel" ? "bg-rose-600 hover:bg-rose-700" : "bg-blue-600 hover:bg-blue-700"}`}>{confirmation.type === "cancel" ? "Yes, cancel" : "Send for approval"}</button>
+                <button type="button" onClick={applyAction} className={`rounded-xl px-4 py-2 text-xs font-bold text-white shadow-sm ${confirmation.type === "confirm" ? "bg-emerald-600 hover:bg-emerald-700" : confirmation.type === "cancel" ? "bg-rose-600 hover:bg-rose-700" : "bg-blue-600 hover:bg-blue-700"}`}>{confirmation.type === "confirm" ? "Yes, confirm" : confirmation.type === "cancel" ? "Yes, cancel" : "Send for approval"}</button>
               </div>
             </div>
           </div>
