@@ -8,7 +8,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowRight, Check, Eye, EyeOff, LockKeyhole, Mail, Stethoscope, UserRound } from "lucide-react";
+import { ArrowRight, Check, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 
 import AuthVisual from "@/components/auth/AuthVisual";
 import Navbar from "@/components/layout/Navbar";
@@ -32,7 +32,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     setError,
     clearErrors,
     formState: { errors, isSubmitting },
@@ -61,12 +60,6 @@ export default function LoginPage() {
     await Promise.resolve();
     saveCurrentUser({ id: user.id, name: user.name, email: user.email, role: user.role });
     router.push(user.role === "doctor" ? "/doctor-dashboard" : "/doctors");
-  };
-
-  const fillDemoCredentials = (type: "patient" | "doctor") => {
-    setValue("email", type === "patient" ? "patient@schedula.com" : "anika@schedula.com", { shouldValidate: true });
-    setValue("password", "password123", { shouldValidate: true });
-    clearErrors();
   };
 
   return (
@@ -136,18 +129,6 @@ export default function LoginPage() {
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </motion.button>
               </form>
-
-              <div className="mt-8">
-                <div className="flex items-center gap-3"><span className="h-px flex-1 bg-[var(--line)]" /><span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Try a demo</span><span className="h-px flex-1 bg-[var(--line)]" /></div>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <button type="button" onClick={() => fillDemoCredentials("patient")} className="group rounded-lg border border-[var(--line)] p-4 text-left hover:border-[var(--brand)] hover:bg-[var(--background)]">
-                    <UserRound size={18} className="text-[var(--brand)]" /><span className="mt-3 block text-sm font-semibold">Patient demo</span><span className="mt-1 block truncate text-[11px] text-[var(--muted)]">patient@schedula.com</span>
-                  </button>
-                  <button type="button" onClick={() => fillDemoCredentials("doctor")} className="group rounded-lg border border-[var(--line)] p-4 text-left hover:border-[var(--brand)] hover:bg-[var(--background)]">
-                    <Stethoscope size={18} className="text-[var(--brand)]" /><span className="mt-3 block text-sm font-semibold">Doctor demo</span><span className="mt-1 block truncate text-[11px] text-[var(--muted)]">anika@schedula.com</span>
-                  </button>
-                </div>
-              </div>
 
               <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6 text-sm">
                 <p className="text-[var(--muted)]">New to Schedula? <Link href="/signup" className="font-semibold text-[var(--brand)] hover:text-[var(--brand-deep)]">Create an account</Link></p>
