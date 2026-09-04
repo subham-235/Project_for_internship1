@@ -6,7 +6,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CalendarDays, LogOut, Menu, Stethoscope, User, X } from "lucide-react";
 import { clearCurrentUser, getCurrentUser, type StoredUser } from "@/lib/client-storage";
 import NotificationBell from "@/components/notifications/NotificationBell";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function Navbar() {
   const [user, setUser] = useState<StoredUser | null>(null);
@@ -33,7 +32,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-2.5">
-          <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-700 text-white shadow-sm shadow-blue-700/20 transition-transform group-hover:scale-105">
+          <div className="grid size-9 place-items-center rounded-full bg-[var(--brand)] text-white shadow-sm shadow-blue-700/20 transition-transform group-hover:rotate-[-7deg] group-hover:scale-105">
             <Stethoscope size={18} strokeWidth={2.2} />
           </div>
           <div className="flex flex-col">
@@ -49,7 +48,7 @@ export default function Navbar() {
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
           <Link
             href="/doctors"
-            className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-full px-3 py-1.5 transition hover:bg-white hover:text-slate-900"
           >
             Find Doctors
           </Link>
@@ -57,13 +56,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/my-appointments"
-                className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-full px-3 py-1.5 transition hover:bg-white hover:text-slate-900"
               >
                 Appointments
               </Link>
               <Link
                 href="/profile"
-                className="rounded-lg px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-full px-3 py-1.5 transition hover:bg-white hover:text-slate-900"
               >
                 Health Profile
               </Link>
@@ -72,7 +71,7 @@ export default function Navbar() {
           {user?.role === "doctor" && (
             <Link
               href="/doctor-dashboard"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 font-semibold text-blue-800 transition hover:bg-blue-100"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-soft)] px-3.5 py-2 font-semibold text-[var(--brand-deep)] transition hover:ring-2 hover:ring-[var(--brand)]/15"
             >
               <CalendarDays size={14} /> Clinical Workspace
             </Link>
@@ -81,7 +80,6 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           {user?.role === "patient" && <NotificationBell user={user} />}
-          <ThemeToggle />
           {user ? (
             <div className="flex items-center gap-2">
               <span className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 sm:inline-flex">
@@ -107,7 +105,7 @@ export default function Navbar() {
           )}
           <Link
             href="/doctors"
-              className="brand-shimmer hidden rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-xs font-bold text-white shadow-sm shadow-blue-700/20 transition hover:from-blue-700 hover:to-blue-800 sm:block"
+              className="brand-shimmer hidden rounded-full bg-[var(--brand)] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-blue-700/20 transition hover:-translate-y-0.5 hover:bg-[var(--brand-deep)] sm:block"
           >
             Book Appointment
           </Link>

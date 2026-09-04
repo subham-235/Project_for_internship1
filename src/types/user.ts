@@ -7,12 +7,12 @@ export type User = {
   password: string;
   role: UserRole;
 
-  // Doctor-specific fields
+
   specialty?: string;
   registrationNumber?: string;
 };
 
-// Keeps compatibility with the original project
+
 export type MockUser = User;
 
 export type PatientProfile = {

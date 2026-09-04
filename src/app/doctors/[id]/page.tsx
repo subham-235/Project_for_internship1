@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
+
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
@@ -84,7 +84,7 @@ export default function DoctorProfilePage() {
     <>
       <Navbar />
       <main className="min-h-screen bg-slate-50/70 pb-20">
-        {/* Clinical Profile Header */}
+        {}
         <section className="border-b border-slate-200/80 bg-gradient-to-b from-slate-900 via-slate-950 to-blue-950 text-white">
           <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
             <Link
@@ -135,11 +135,11 @@ export default function DoctorProfilePage() {
           </div>
         </section>
 
-        {/* Details & Interactive Sidebar Grid */}
+        {}
         <section className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_360px] lg:px-8">
-          {/* Left Column: Clinical Dossier */}
+          {}
           <div className="space-y-8">
-            {/* About Card */}
+            {}
             <article className="depth-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
               <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
                 Specialist Background
@@ -150,7 +150,7 @@ export default function DoctorProfilePage() {
               <p className="mt-4 text-sm leading-relaxed text-slate-600">{doctor.bio}</p>
             </article>
 
-            {/* Credentials & Languages */}
+            {}
             <div className="grid gap-6 sm:grid-cols-2">
               <article className="depth-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
                 <div className="grid size-10 place-items-center rounded-xl bg-blue-50 text-blue-700">
@@ -184,7 +184,7 @@ export default function DoctorProfilePage() {
               </article>
             </div>
 
-            {/* Clinical Focus */}
+            {}
             <article className="depth-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-2.5">
                 <div className="grid size-8 place-items-center rounded-lg bg-blue-600 text-white">
@@ -200,7 +200,7 @@ export default function DoctorProfilePage() {
               </p>
             </article>
 
-            {/* Patient Reviews Section */}
+            {}
             {reviews.length > 0 && (
               <article className="depth-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -252,7 +252,7 @@ export default function DoctorProfilePage() {
             )}
           </div>
 
-          {/* Right Column: Sticky Slot Booking Assistant */}
+          {}
           <aside className="depth-card h-fit rounded-2xl border border-slate-200/90 bg-white p-6 shadow-lg lg:sticky lg:top-24">
             <div className="flex items-end justify-between border-b border-slate-100 pb-4">
               <div>

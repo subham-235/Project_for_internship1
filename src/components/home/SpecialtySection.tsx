@@ -85,7 +85,7 @@ export default function SpecialtySection() {
   return (
     <AnimatedSection id="specialties" className="bg-slate-50/70 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {}
         <div className="flex flex-col justify-between gap-6 border-b border-slate-200/80 pb-8 sm:flex-row sm:items-end">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-800">
@@ -108,15 +108,18 @@ export default function SpecialtySection() {
           </Link>
         </div>
 
-        {/* High Density Grid */}
+        {}
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {specialtiesData.map((item) => {
+          {specialtiesData.map((item, index) => {
             const Icon = item.icon;
             return (
               <motion.article
                 key={item.name}
+                initial={{ opacity: 0, y: 28, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
                 whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
                 className="depth-card group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition hover:border-blue-300 hover:shadow-md"
               >
                 <div>
@@ -134,7 +137,7 @@ export default function SpecialtySection() {
                   </h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{item.note}</p>
 
-                  {/* Conditions Chips */}
+                  {}
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {item.conditions.map((condition) => (
                       <span
@@ -147,7 +150,7 @@ export default function SpecialtySection() {
                   </div>
                 </div>
 
-                {/* Card Footer with Meta & CTA */}
+                {}
                 <div className="mt-6 border-t border-slate-100 pt-4">
                   <div className="flex items-center justify-between text-xs text-slate-600">
                     <span className="flex items-center gap-1">

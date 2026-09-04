@@ -1,7 +1,7 @@
 export type Doctor = {
   id: string;
 
-  // Links the doctor profile with login account
+
   userId?: string;
 
   name: string;
@@ -36,11 +36,11 @@ export type Doctor = {
 
   languages: string[];
 
-  /*
-    Kept for compatibility with old mock doctors.
 
-    These values are only used to seed initial
-    dated availability once.
-  */
+
+
+
+
+
   slots: string[];
 };

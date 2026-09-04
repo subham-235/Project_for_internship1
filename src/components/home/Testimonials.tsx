@@ -59,7 +59,7 @@ export default function Testimonials() {
               Trusted by 32,000+ Patients
             </h3>
 
-            {/* Carousel Buttons */}
+            {}
             <div className="mt-8 flex gap-2">
               <button
                 type="button"

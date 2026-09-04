@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, PhoneCall, ShieldCheck, Stethoscope } from "lucide-react";
+import { AlertTriangle, Building2, PhoneCall, ShieldCheck, Stethoscope } from "lucide-react";
 
 const groups = [
   {
@@ -43,7 +43,7 @@ const groups = [
 export default function LandingFooter() {
   return (
     <footer className="border-t border-slate-800 bg-slate-950 text-white">
-      {/* Top Clinical Accreditation Banner */}
+      {}
       <div className="border-b border-white/10 bg-slate-900/60 py-4">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 text-xs text-slate-400 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-6">
@@ -65,7 +65,7 @@ export default function LandingFooter() {
         </div>
       </div>
 
-      {/* Main Footer Body */}
+      {}
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
@@ -84,7 +84,7 @@ export default function LandingFooter() {
             </p>
 
             <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3 text-[11px] text-amber-200/90 leading-relaxed">
-              ⚠️ <strong>Emergency Notice:</strong> Schedula is for outpatient consultations and scheduled care. In life-threatening emergencies, immediately dial <strong>108</strong> or proceed to the nearest emergency room.
+              <AlertTriangle size={14} className="mr-1 inline" /> <strong>Emergency Notice:</strong> Schedula is for outpatient consultations and scheduled care. In life-threatening emergencies, immediately dial <strong>108</strong> or proceed to the nearest emergency room.
             </div>
           </div>
 

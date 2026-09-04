@@ -1,4 +1,5 @@
 import type { Doctor } from "@/types/doctor";
+import { ShieldCheck } from "lucide-react";
 
 export default function BookingSummary({ doctor, date, time }: { doctor: Doctor; date: string; time: string }) {
   const formattedDate = date
@@ -16,7 +17,7 @@ export default function BookingSummary({ doctor, date, time }: { doctor: Doctor;
         <div><dt className="text-[var(--muted)]">Date</dt><dd className="mt-1 font-medium">{formattedDate}</dd></div>
         <div><dt className="text-[var(--muted)]">Time</dt><dd className="mt-1 font-medium">{time || "Select a slot"}</dd></div>
         <div><dt className="text-[var(--muted)]">Location</dt><dd className="mt-1 font-medium">{doctor.location}</dd></div>
-        <div className="border-t border-[var(--line)] pt-4"><dt className="text-[var(--muted)]">Consultation fee</dt><dd className="mt-1 text-xl font-semibold">₹{doctor.fee}</dd></div>
+        <div className="border-t border-[var(--line)] pt-4"><dt className="text-[var(--muted)]">Total payable</dt><dd className="mt-1 text-xl font-semibold">₹{doctor.fee}</dd><p className="mt-2 flex items-center gap-1.5 text-[10px] font-semibold text-emerald-700"><ShieldCheck size={13} /> Secure demo checkout</p></div>
       </dl>
     </aside>
   );

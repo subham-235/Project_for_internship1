@@ -1,7 +1,11 @@
 import {
+  AlertTriangle,
   CalendarDays,
+  CalendarCheck2,
   ClipboardPlus,
   Clock3,
+  FlaskConical,
+  Goal,
   Pill,
   Stethoscope,
   UserRound,
@@ -118,6 +122,19 @@ export default function PrescriptionView({
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#D96B32]">Care instructions</p>
           <p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#0B1329]">{prescription.notes || "No additional instructions."}</p>
         </section>
+
+        {prescription.carePlan && (
+          <section className="mt-6 overflow-hidden rounded-2xl border border-blue-200 bg-blue-50/40">
+            <div className="border-b border-blue-100 bg-blue-600 px-4 py-4 text-white sm:px-5"><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-blue-100">Published care plan</p><h3 className="mt-1 text-base font-bold">Recovery and follow-up</h3></div>
+            <div className="grid gap-3 p-4 sm:grid-cols-2 sm:p-5">
+              <div className="rounded-xl bg-white p-4 sm:col-span-2"><p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-blue-700"><Goal size={14} /> Treatment goal</p><p className="mt-2 text-sm font-semibold leading-6 text-slate-800">{prescription.carePlan.treatmentGoal}</p></div>
+              <div className="rounded-xl bg-white p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Self-care instructions</p><p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700">{prescription.carePlan.selfCareInstructions}</p></div>
+              <div className="rounded-xl border border-rose-100 bg-rose-50 p-4"><p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-rose-700"><AlertTriangle size={14} /> Warning signs</p><p className="mt-2 whitespace-pre-line text-sm leading-6 text-rose-900">{prescription.carePlan.warningSigns}</p></div>
+              {prescription.carePlan.recommendedTests && <div className="rounded-xl bg-white p-4"><p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-slate-500"><FlaskConical size={14} /> Recommended tests</p><p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700">{prescription.carePlan.recommendedTests}</p></div>}
+              {(prescription.carePlan.followUpDate || prescription.carePlan.followUpNotes) && <div className="rounded-xl bg-white p-4"><p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-slate-500"><CalendarCheck2 size={14} /> Follow-up</p>{prescription.carePlan.followUpDate && <p className="mt-2 text-sm font-bold text-blue-700">{new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(new Date(`${prescription.carePlan.followUpDate}T12:00:00`))}</p>}<p className="mt-1 whitespace-pre-line text-sm leading-6 text-slate-700">{prescription.carePlan.followUpNotes}</p></div>}
+            </div>
+          </section>
+        )}
       </div>
     </article>
   );

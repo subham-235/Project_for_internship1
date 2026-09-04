@@ -6,7 +6,9 @@ export type NotificationType =
   | "reminder"
   | "missed"
   | "completed"
-  | "prescription";
+  | "prescription"
+  | "payment_success"
+  | "payment_failed";
 
 export type AppNotification = {
   id: string;

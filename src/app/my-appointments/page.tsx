@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import {
   CalendarDays,
   CheckCircle2,
+  ClipboardList,
   Download,
   FileText,
   RefreshCcw,
@@ -24,6 +25,7 @@ import Navbar from "@/components/layout/Navbar";
 import StatusBadge from "@/components/appointments/StatusBadge";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import PatientLiveQueue from "@/components/appointments/PatientLiveQueue";
 
 import type { Booking } from "@/types/booking";
 
@@ -299,6 +301,16 @@ export default function MyAppointmentsPage() {
                         </div>
                       </div>
 
+                      {(booking.status === "pending" || booking.status === "confirmed") && (
+                        <Link
+                          href={`/my-appointments/${booking.id}/intake`}
+                          className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-bold ${booking.intake ? "border border-emerald-200 bg-emerald-50 text-emerald-700" : "bg-blue-600 text-white shadow-sm shadow-blue-600/20"}`}
+                        >
+                          <ClipboardList size={16} />
+                          {booking.intake ? "Review intake" : "Complete intake"}
+                        </Link>
+                      )}
+
                       {booking.status === "completed" && (
                         <div className="flex flex-wrap gap-2">
                           {prescription ? (
@@ -372,6 +384,8 @@ export default function MyAppointmentsPage() {
                           <strong>Doctor proposed a new time.</strong> Review the date and time above, then approve it to confirm your appointment.
                         </div>
                       )}
+
+                    <PatientLiveQueue booking={booking} />
 
                     {booking.status === "completed" && (
                       <div

@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import Link from "next/link";
 
@@ -11,6 +11,28 @@ import {
 import {
   useRouter,
 } from "next/navigation";
+
+import {
+  ArrowLeft,
+  BadgeCheck,
+  BookOpen,
+  CalendarDays,
+  CheckCircle2,
+  CircleDollarSign,
+  Clock3,
+  Globe2,
+  GraduationCap,
+  ImageIcon,
+  Languages as LanguagesIcon,
+  MapPin,
+  Phone,
+  Plus,
+  Save,
+  ShieldCheck,
+  Stethoscope,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 
 import type {
   Doctor,
@@ -84,6 +106,9 @@ const WEEKDAYS = [
       "Sun",
   },
 ];
+
+const inputClass = "mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 disabled:bg-slate-50 disabled:text-slate-500";
+const labelClass = "text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500";
 
 
 function normalize(
@@ -992,673 +1017,368 @@ export default function DoctorProfilePage() {
     );
   }
 
+  const availableSlots = slots.filter((slot) => slot.status === "available").length;
+  const bookedSlots = slots.filter((slot) => slot.status === "booked").length;
+  const profileValues = [name, phone, specialty, registrationNumber, experience, location, fee, bio, education, languages];
+  const profileCompletion = Math.round((profileValues.filter((value) => value.trim()).length / profileValues.length) * 100);
+
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-8">
+    <main className="min-h-screen bg-slate-50 px-4 py-5 text-slate-900 sm:px-7 sm:py-7 lg:px-10">
+      <div className="mx-auto max-w-[92rem]">
+        <section className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-[0_18px_55px_-35px_rgba(15,23,42,0.35)]">
+          <div className="relative overflow-hidden bg-[linear-gradient(120deg,#0f172a_0%,#172554_55%,#0c4a6e_100%)] px-5 py-6 text-white sm:px-8 sm:py-8">
+            <div className="absolute -right-20 -top-32 size-72 rounded-full bg-blue-500/20 blur-3xl" />
+            <div className="absolute bottom-0 left-1/3 size-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="mx-auto max-w-6xl">
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <Link href="/doctor-dashboard" className="inline-flex items-center gap-2 text-xs font-bold text-blue-200 transition hover:text-white">
+                  <ArrowLeft size={15} />
+                  Back to dashboard
+                </Link>
+                <div className="mt-5 flex items-center gap-4">
+                  <div className="grid size-16 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10 text-xl font-bold shadow-inner backdrop-blur">
+                    {initials(name) || "DR"}
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{name}</h1>
+                      <BadgeCheck size={20} className="text-cyan-300" aria-label="Verified profile" />
+                    </div>
+                    <p className="mt-1 text-sm font-semibold text-blue-200">{specialty}</p>
+                    <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-300">
+                      <MapPin size={13} />
+                      {location || "Clinic location not added"}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-        <Link
-          href="/doctor-dashboard"
-          className="text-sm font-semibold text-[var(--brand)]"
-        >
-          ← Back to dashboard
-        </Link>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="min-w-24 rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-center backdrop-blur sm:min-w-28">
+                  <p className="text-xl font-bold">{profileCompletion}%</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-blue-200">Profile</p>
+                </div>
+                <div className="min-w-24 rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-center backdrop-blur sm:min-w-28">
+                  <p className="text-xl font-bold">{availableSlots}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-blue-200">Open slots</p>
+                </div>
+                <div className="min-w-24 rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-center backdrop-blur sm:min-w-28">
+                  <p className="text-xl font-bold">{bookedSlots}</p>
+                  <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-blue-200">Booked</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-
-        <div className="mt-6">
-
-          <p className="text-sm font-semibold text-[var(--brand)]">
-            Doctor Profile
-          </p>
-
-          <h1 className="mt-2 text-3xl font-semibold">
-            Profile & Availability
-          </h1>
-
-          <p className="mt-2 text-sm text-[var(--muted)]">
-            Update your professional information
-            and manage patient booking slots.
-          </p>
-
-        </div>
-
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-white px-5 py-3 sm:px-8">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+              <ShieldCheck size={15} className="text-emerald-600" />
+              Your public profile and booking availability stay synchronized.
+            </div>
+            <button type="button" onClick={saveProfile} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-blue-600/20 transition hover:bg-blue-700">
+              <Save size={15} />
+              Save profile
+            </button>
+          </div>
+        </section>
 
         {message && (
-          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4 text-sm text-[#C9362D]">
+          <div role="status" className="mt-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+            <CheckCircle2 size={18} className="shrink-0" />
             {message}
           </div>
         )}
 
-
         {error && (
-          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4 text-sm text-[#C9362D]">
+          <div role="alert" className="mt-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
             {error}
           </div>
         )}
 
+        <div className="mt-6 grid items-start gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
+          <aside className="space-y-5 xl:sticky xl:top-6">
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.4)]">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Profile readiness</p>
+                <span className="text-sm font-bold text-blue-700">{profileCompletion}%</span>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 transition-all" style={{ width: profileCompletion + "%" }} />
+              </div>
+              <p className="mt-3 text-xs leading-5 text-slate-500">Complete your professional information to help patients choose confidently.</p>
+            </section>
 
-        <section className="mt-8 rounded-xl border border-[var(--line)] bg-white p-6">
+            <section className="rounded-2xl border border-slate-200 bg-white p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Public profile preview</p>
+              <div className="mt-4 grid size-14 place-items-center rounded-2xl bg-blue-50 text-lg font-bold text-blue-700">{initials(name) || "DR"}</div>
+              <h2 className="mt-4 text-lg font-bold">{name}</h2>
+              <p className="mt-1 text-sm font-semibold text-blue-700">{specialty}</p>
+              <div className="mt-4 space-y-3 border-t border-slate-100 pt-4 text-xs text-slate-600">
+                <p className="flex items-start gap-2"><GraduationCap size={15} className="mt-0.5 shrink-0 text-blue-600" /> {education || "Education not added"}</p>
+                <p className="flex items-start gap-2"><LanguagesIcon size={15} className="mt-0.5 shrink-0 text-blue-600" /> {languages || "Languages not added"}</p>
+                <p className="flex items-start gap-2"><CircleDollarSign size={15} className="mt-0.5 shrink-0 text-blue-600" /> ₹{fee || "—"} consultation</p>
+              </div>
+            </section>
 
-          <h2 className="text-lg font-semibold">
-            Profile Details
-          </h2>
+            <div className="grid grid-cols-2 gap-3 xl:grid-cols-1">
+              <Link href="/doctor-dashboard/calendar" className="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-200 hover:bg-blue-50/40">
+                <CalendarDays size={18} className="text-blue-600" />
+                <p className="mt-3 text-sm font-bold">Open calendar</p>
+                <p className="mt-1 text-[11px] text-slate-500">Review daily schedule</p>
+              </Link>
+              <Link href="/doctor-dashboard/appointments" className="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-blue-200 hover:bg-blue-50/40">
+                <Stethoscope size={18} className="text-blue-600" />
+                <p className="mt-3 text-sm font-bold">Appointments</p>
+                <p className="mt-1 text-[11px] text-slate-500">Manage patient requests</p>
+              </Link>
+            </div>
+          </aside>
 
+          <div className="space-y-6">
+            <section className="rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_-24px_rgba(15,23,42,0.4)]">
+              <div className="border-b border-slate-100 px-5 py-5 sm:px-7">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 place-items-center rounded-xl bg-blue-50 text-blue-700"><UserRound size={19} /></span>
+                  <div>
+                    <h2 className="text-lg font-bold">Professional identity</h2>
+                    <p className="mt-0.5 text-xs text-slate-500">Information used on your public doctor profile.</p>
+                  </div>
+                </div>
+              </div>
 
-          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7 xl:grid-cols-3">
+                <label>
+                  <span className={labelClass}>Doctor name *</span>
+                  <input value={name} onChange={(event) => setName(event.target.value)} className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Account email</span>
+                  <input value={currentUser.email} disabled className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Phone number</span>
+                  <div className="relative">
+                    <Phone size={15} className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-slate-400" />
+                    <input value={phone} onChange={(event) => setPhone(event.target.value)} className={inputClass + " pl-10"} />
+                  </div>
+                </label>
+                <label>
+                  <span className={labelClass}>Specialty *</span>
+                  <select value={specialty} onChange={(event) => setSpecialty(event.target.value)} className={inputClass}>
+                    {specialties.filter((item) => item !== "All").map((item) => <option key={item} value={item}>{item}</option>)}
+                  </select>
+                </label>
+                <label>
+                  <span className={labelClass}>Registration number</span>
+                  <input value={registrationNumber} onChange={(event) => setRegistrationNumber(event.target.value)} className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Years of experience</span>
+                  <input type="number" min="0" value={experience} onChange={(event) => setExperience(event.target.value)} className={inputClass} />
+                </label>
+              </div>
+            </section>
 
-            <label>
-              <span className="text-sm font-medium">
-                Name
-              </span>
+            <section className="rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_-24px_rgba(15,23,42,0.4)]">
+              <div className="border-b border-slate-100 px-5 py-5 sm:px-7">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 place-items-center rounded-xl bg-violet-50 text-violet-700"><BookOpen size={19} /></span>
+                  <div>
+                    <h2 className="text-lg font-bold">Practice details</h2>
+                    <p className="mt-0.5 text-xs text-slate-500">Clinic, pricing and clinical background.</p>
+                  </div>
+                </div>
+              </div>
 
-              <input
-                value={
-                  name
-                }
-                onChange={(
-                  event
-                ) =>
-                  setName(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
+              <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
+                <label>
+                  <span className={labelClass}>Clinic location *</span>
+                  <div className="relative">
+                    <MapPin size={15} className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-slate-400" />
+                    <input value={location} onChange={(event) => setLocation(event.target.value)} className={inputClass + " pl-10"} />
+                  </div>
+                </label>
+                <label>
+                  <span className={labelClass}>Consultation fee *</span>
+                  <div className="relative">
+                    <span className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-sm font-bold text-slate-500">₹</span>
+                    <input type="number" min="1" value={fee} onChange={(event) => setFee(event.target.value)} className={inputClass + " pl-9"} />
+                  </div>
+                </label>
+                <label>
+                  <span className={labelClass}>Education</span>
+                  <div className="relative">
+                    <GraduationCap size={15} className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-slate-400" />
+                    <input value={education} onChange={(event) => setEducation(event.target.value)} placeholder="MBBS, MD - Medicine" className={inputClass + " pl-10"} />
+                  </div>
+                  <span className="mt-1.5 block text-[10px] text-slate-400">Separate qualifications with commas.</span>
+                </label>
+                <label>
+                  <span className={labelClass}>Languages</span>
+                  <div className="relative">
+                    <LanguagesIcon size={15} className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-slate-400" />
+                    <input value={languages} onChange={(event) => setLanguages(event.target.value)} placeholder="English, Bengali, Hindi" className={inputClass + " pl-10"} />
+                  </div>
+                  <span className="mt-1.5 block text-[10px] text-slate-400">Separate languages with commas.</span>
+                </label>
+                <label className="sm:col-span-2">
+                  <span className={labelClass}>Profile image URL</span>
+                  <div className="relative">
+                    <ImageIcon size={15} className="pointer-events-none absolute left-4 top-1/2 mt-1 -translate-y-1/2 text-slate-400" />
+                    <input value={image} onChange={(event) => setImage(event.target.value)} placeholder="https://example.com/doctor-photo.jpg" className={inputClass + " pl-10"} />
+                  </div>
+                </label>
+                <label className="sm:col-span-2">
+                  <span className={labelClass}>Professional bio</span>
+                  <textarea rows={5} value={bio} onChange={(event) => setBio(event.target.value)} placeholder="Describe your clinical focus, approach and areas of expertise." className={inputClass + " resize-none leading-6"} />
+                  <span className="mt-1.5 block text-right text-[10px] text-slate-400">{bio.length} characters</span>
+                </label>
+              </div>
 
+              <div className="flex justify-end border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-7">
+                <button type="button" onClick={saveProfile} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-sm shadow-blue-600/20 hover:bg-blue-700">
+                  <Save size={16} />
+                  Save professional profile
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
 
-            <label>
-              <span className="text-sm font-medium">
-                Account Email
-              </span>
-
-              <input
-                value={
-                  currentUser.email
-                }
-                disabled
-                className="mt-2 w-full rounded-xl border border-[var(--line)] bg-[#F8FAFC] px-4 py-3 text-sm text-[var(--muted)]"
-              />
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Phone
-              </span>
-
-              <input
-                value={
-                  phone
-                }
-                onChange={(
-                  event
-                ) =>
-                  setPhone(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Specialty
-              </span>
-
-              <select
-                value={
-                  specialty
-                }
-                onChange={(
-                  event
-                ) =>
-                  setSpecialty(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              >
-                {specialties
-                  .filter(
-                    (item) =>
-                      item !==
-                      "All"
-                  )
-                  .map(
-                    (
-                      item
-                    ) => (
-                      <option
-                        key={
-                          item
-                        }
-                        value={
-                          item
-                        }
-                      >
-                        {
-                          item
-                        }
-                      </option>
-                    )
-                  )}
-              </select>
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Registration Number
-              </span>
-
-              <input
-                value={
-                  registrationNumber
-                }
-                onChange={(
-                  event
-                ) =>
-                  setRegistrationNumber(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Experience
-              </span>
-
-              <input
-                type="number"
-                min="0"
-                value={
-                  experience
-                }
-                onChange={(
-                  event
-                ) =>
-                  setExperience(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Clinic Location
-              </span>
-
-              <input
-                value={
-                  location
-                }
-                onChange={(
-                  event
-                ) =>
-                  setLocation(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label>
-              <span className="text-sm font-medium">
-                Consultation Fee
-              </span>
-
-              <input
-                type="number"
-                value={
-                  fee
-                }
-                onChange={(
-                  event
-                ) =>
-                  setFee(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label className="sm:col-span-2">
-              <span className="text-sm font-medium">
-                Profile Image URL
-              </span>
-
-              <input
-                value={
-                  image
-                }
-                onChange={(
-                  event
-                ) =>
-                  setImage(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label className="sm:col-span-2">
-              <span className="text-sm font-medium">
-                Education
-              </span>
-
-              <input
-                value={
-                  education
-                }
-                onChange={(
-                  event
-                ) =>
-                  setEducation(
-                    event.target.value
-                  )
-                }
-                placeholder="MBBS, MD - Medicine"
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label className="sm:col-span-2">
-              <span className="text-sm font-medium">
-                Languages
-              </span>
-
-              <input
-                value={
-                  languages
-                }
-                onChange={(
-                  event
-                ) =>
-                  setLanguages(
-                    event.target.value
-                  )
-                }
-                placeholder="English, Bengali, Hindi"
-                className="mt-2 w-full rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
-
-            <label className="sm:col-span-2">
-              <span className="text-sm font-medium">
-                Bio
-              </span>
-
-              <textarea
-                rows={
-                  4
-                }
-                value={
-                  bio
-                }
-                onChange={(
-                  event
-                ) =>
-                  setBio(
-                    event.target.value
-                  )
-                }
-                className="mt-2 w-full resize-none rounded-xl border border-[var(--line)] px-4 py-3 text-sm"
-              />
-            </label>
-
+        <section className="mt-6 overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_12px_35px_-28px_rgba(15,23,42,0.4)]">
+          <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700"><CalendarDays size={20} /></span>
+              <div>
+                <h2 className="text-lg font-bold">Booking availability</h2>
+                <p className="mt-0.5 text-xs text-slate-500">Publish one-time or recurring appointment slots.</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-[10px] font-bold text-emerald-700">{availableSlots} open</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[10px] font-bold text-slate-600">{bookedSlots} booked</span>
+            </div>
           </div>
 
-
-          <button
-            type="button"
-            onClick={
-              saveProfile
-            }
-            className="mt-6 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white"
-          >
-            Update Profile
-          </button>
-
-        </section>
-
-
-        <section className="mt-8 rounded-xl border border-[var(--line)] bg-white p-6">
-
-          <h2 className="text-lg font-semibold">
-            Appointment Availability
-          </h2>
-
-          <p className="mt-2 text-sm text-[var(--muted)]">
-            Create single or recurring appointment
-            slots for patients.
-          </p>
-
-
-          <div className="mt-6 rounded-xl bg-[#F8FAFC] p-5">
-
-            <h3 className="font-semibold">
-              Add Single Slot
-            </h3>
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_1fr_auto]">
-
-              <input
-                type="date"
-                min={
-                  today()
-                }
-                value={
-                  singleDate
-                }
-                onChange={(
-                  event
-                ) =>
-                  setSingleDate(
-                    event.target.value
-                  )
-                }
-                className="rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-              />
-
-              <input
-                type="time"
-                value={
-                  singleTime
-                }
-                onChange={(
-                  event
-                ) =>
-                  setSingleTime(
-                    event.target.value
-                  )
-                }
-                className="rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-              />
-
-              <button
-                type="button"
-                onClick={
-                  createSingleSlot
-                }
-                className="rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white"
-              >
-                Add Slot
+          <div className="grid gap-5 p-5 sm:p-7 xl:grid-cols-2">
+            <div className="rounded-2xl border border-blue-100 bg-blue-50/45 p-5">
+              <div className="flex items-start gap-3">
+                <span className="grid size-9 place-items-center rounded-xl bg-blue-600 text-white"><Plus size={17} /></span>
+                <div>
+                  <h3 className="font-bold">One-time slot</h3>
+                  <p className="mt-1 text-xs text-slate-500">Add a specific date and time to your calendar.</p>
+                </div>
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <label>
+                  <span className={labelClass}>Date</span>
+                  <input type="date" min={today()} value={singleDate} onChange={(event) => setSingleDate(event.target.value)} className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Time</span>
+                  <input type="time" value={singleTime} onChange={(event) => setSingleTime(event.target.value)} className={inputClass} />
+                </label>
+              </div>
+              <button type="button" onClick={createSingleSlot} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700">
+                <Plus size={16} />
+                Add one-time slot
               </button>
-
             </div>
 
-          </div>
-
-
-          <div className="mt-5 rounded-xl bg-[#F8FAFC] p-5">
-
-            <h3 className="font-semibold">
-              Recurring Availability
-            </h3>
-
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-3">
-
-              <label>
-                <span className="text-xs font-semibold text-[var(--muted)]">
-                  From
-                </span>
-
-                <input
-                  type="date"
-                  min={
-                    today()
-                  }
-                  value={
-                    recurringStart
-                  }
-                  onChange={(
-                    event
-                  ) =>
-                    setRecurringStart(
-                      event.target.value
-                    )
-                  }
-                  className="mt-2 w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-                />
-              </label>
-
-
-              <label>
-                <span className="text-xs font-semibold text-[var(--muted)]">
-                  Until
-                </span>
-
-                <input
-                  type="date"
-                  min={
-                    recurringStart
-                  }
-                  value={
-                    recurringEnd
-                  }
-                  onChange={(
-                    event
-                  ) =>
-                    setRecurringEnd(
-                      event.target.value
-                    )
-                  }
-                  className="mt-2 w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-                />
-              </label>
-
-
-              <label>
-                <span className="text-xs font-semibold text-[var(--muted)]">
-                  Time
-                </span>
-
-                <input
-                  type="time"
-                  value={
-                    recurringTime
-                  }
-                  onChange={(
-                    event
-                  ) =>
-                    setRecurringTime(
-                      event.target.value
-                    )
-                  }
-                  className="mt-2 w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-                />
-              </label>
-
-            </div>
-
-
-            <p className="mt-5 text-xs font-semibold text-[var(--muted)]">
-              Repeat on
-            </p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-
-              {WEEKDAYS.map(
-                (
-                  day
-                ) => (
-
+            <div className="rounded-2xl border border-violet-100 bg-violet-50/40 p-5">
+              <div className="flex items-start gap-3">
+                <span className="grid size-9 place-items-center rounded-xl bg-violet-600 text-white"><Globe2 size={17} /></span>
+                <div>
+                  <h3 className="font-bold">Recurring schedule</h3>
+                  <p className="mt-1 text-xs text-slate-500">Repeat one appointment time on selected weekdays.</p>
+                </div>
+              </div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <label>
+                  <span className={labelClass}>From</span>
+                  <input type="date" min={today()} value={recurringStart} onChange={(event) => setRecurringStart(event.target.value)} className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Until</span>
+                  <input type="date" min={recurringStart} value={recurringEnd} onChange={(event) => setRecurringEnd(event.target.value)} className={inputClass} />
+                </label>
+                <label>
+                  <span className={labelClass}>Time</span>
+                  <input type="time" value={recurringTime} onChange={(event) => setRecurringTime(event.target.value)} className={inputClass} />
+                </label>
+              </div>
+              <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.1em] text-slate-500">Repeat on</p>
+              <div className="mt-2 grid grid-cols-7 gap-1.5">
+                {WEEKDAYS.map((day) => (
                   <button
-                    key={
-                      day.value
-                    }
+                    key={day.value}
                     type="button"
-                    onClick={() =>
-                      toggleDay(
-                        day.value
-                      )
-                    }
-                    className={`rounded-xl border px-4 py-2 text-sm font-semibold ${
-                      recurringDays.includes(
-                        day.value
-                      )
-                        ? "border-[var(--brand)] bg-[var(--brand)] text-white"
-                        : "border-[var(--line)] bg-white"
-                    }`}
+                    onClick={() => toggleDay(day.value)}
+                    aria-pressed={recurringDays.includes(day.value)}
+                    className={"rounded-lg border px-1 py-2 text-[11px] font-bold transition " + (recurringDays.includes(day.value) ? "border-violet-600 bg-violet-600 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-violet-300")}
                   >
-                    {
-                      day.label
-                    }
+                    {day.label}
                   </button>
-
-                )
-              )}
-
+                ))}
+              </div>
+              <button type="button" onClick={createRecurringSlots} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white hover:bg-violet-700">
+                <CalendarDays size={16} />
+                Create recurring slots
+              </button>
             </div>
-
-
-            <button
-              type="button"
-              onClick={
-                createRecurringSlots
-              }
-              className="mt-5 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white"
-            >
-              Create Recurring Slots
-            </button>
-
           </div>
 
-
-          <div className="mt-8">
-
-            <div className="flex items-center justify-between">
-
-              <h3 className="font-semibold">
-                Existing Slots
-              </h3>
-
-              <span className="text-sm text-[var(--muted)]">
-                {
-                  slots.length
-                } total
-              </span>
-
+          <div className="border-t border-slate-100 px-5 py-6 sm:px-7">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h3 className="font-bold">Published schedule</h3>
+                <p className="mt-1 text-xs text-slate-500">Open slots can be removed. Booked slots remain locked to protect appointments.</p>
+              </div>
+              <Link href="/doctor-dashboard/calendar" className="inline-flex items-center gap-2 text-xs font-bold text-blue-700 hover:text-blue-900">
+                <CalendarDays size={15} />
+                View full calendar
+              </Link>
             </div>
 
-
-            {slots.length >
-            0 ? (
-
-              <div className="mt-4 divide-y divide-[var(--line)] overflow-hidden rounded-xl border border-[var(--line)]">
-
-                {slots.map(
-                  (
-                    slot
-                  ) => (
-
-                    <div
-                      key={
-                        slot.id
-                      }
-                      className="grid gap-3 bg-white p-4 sm:grid-cols-[1fr_1fr_auto_auto] sm:items-center"
-                    >
-
-                      <p className="text-sm font-semibold">
-                        {
-                          displayDate(
-                            slot.date
-                          )
-                        }
-                      </p>
-
-                      <p className="text-sm">
-                        {
-                          slot.time
-                        }
-                      </p>
-
-                      <span
-                        className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
-                          slot.status ===
-                          "available"
-                            ? "bg-[#F8FAFC] text-[#C9362D]"
-                            : "bg-[#F8FAFC] text-[#D96B32]"
-                        }`}
-                      >
-                        {
-                          slot.status
-                        }
+            {slots.length > 0 ? (
+              <div className="mt-5 grid max-h-[520px] gap-3 overflow-y-auto pr-1 md:grid-cols-2 xl:grid-cols-3">
+                {slots.map((slot) => (
+                  <article key={slot.id} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-blue-200 hover:bg-white">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-bold text-slate-900">{displayDate(slot.date)}</p>
+                        <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-slate-600"><Clock3 size={14} className="text-blue-600" /> {slot.time}</p>
+                      </div>
+                      <span className={"rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide " + (slot.status === "available" ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-600")}>
+                        {slot.status}
                       </span>
-
-
-                      {slot.status ===
-                      "available" ? (
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            removeSlot(
-                              slot.id
-                            )
-                          }
-                          className="text-sm font-semibold text-[#C9362D]"
-                        >
-                          Delete
-                        </button>
-
-                      ) : (
-
-                        <span className="text-xs text-[var(--muted)]">
-                          Locked
-                        </span>
-
-                      )}
-
                     </div>
-
-                  )
-                )}
-
+                    <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-3">
+                      <span className="text-[10px] font-semibold text-slate-400">{slot.recurringGroupId ? "Recurring slot" : "One-time slot"}</span>
+                      {slot.status === "available" ? (
+                        <button type="button" onClick={() => removeSlot(slot.id)} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 hover:bg-rose-50">
+                          <Trash2 size={13} />
+                          Remove
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400"><ShieldCheck size={12} /> Locked</span>
+                      )}
+                    </div>
+                  </article>
+                ))}
               </div>
-
             ) : (
-
-              <div className="mt-4 rounded-xl border border-dashed border-[var(--line)] p-10 text-center">
-
-                <p className="font-semibold">
-                  No availability created yet
-                </p>
-
-                <p className="mt-2 text-sm text-[var(--muted)]">
-                  Add your first appointment slot above.
-                </p>
-
+              <div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-12 text-center">
+                <CalendarDays size={28} className="mx-auto text-slate-300" />
+                <p className="mt-3 font-bold">No availability published</p>
+                <p className="mt-1 text-sm text-slate-500">Create a one-time or recurring slot above.</p>
               </div>
-
             )}
-
           </div>
-
         </section>
-
       </div>
-
     </main>
   );
 }

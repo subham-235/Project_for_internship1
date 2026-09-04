@@ -13,6 +13,7 @@ import {
   UserRound,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import { StaggerItem, StaggerReveal } from "@/components/motion/StaggerReveal";
 
 const patientPerks = [
   { label: "Direct Access to 450+ Verified Doctors", icon: Search },
@@ -46,10 +47,10 @@ export default function ForEveryone() {
           </p>
         </div>
 
-        {/* Dual Cards Grid */}
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
-          {/* Patient Card */}
-          <article className="depth-card relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/70 to-white p-8 sm:p-10 shadow-sm transition hover:border-blue-300 hover:shadow-md">
+        {}
+        <StaggerReveal className="mt-14 grid gap-8 lg:grid-cols-2">
+          {}
+          <StaggerItem className="depth-card relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/70 to-white p-8 shadow-sm transition hover:border-blue-300 hover:shadow-md sm:p-10">
             <div className="inline-block rounded-xl bg-blue-100/70 px-3 py-1 text-xs font-bold text-blue-900">
               For Patients & Families
             </div>
@@ -84,10 +85,10 @@ export default function ForEveryone() {
                 <ArrowRight size={14} />
               </Link>
             </div>
-          </article>
+          </StaggerItem>
 
-          {/* Doctor Card */}
-          <article className="relative overflow-hidden rounded-3xl border border-blue-900/10 bg-gradient-to-b from-slate-900 via-slate-950 to-blue-950 p-8 sm:p-10 text-white shadow-xl">
+          {}
+          <StaggerItem className="relative overflow-hidden rounded-3xl border border-blue-900/10 bg-gradient-to-b from-slate-900 via-slate-950 to-blue-950 p-8 text-white shadow-xl sm:p-10">
             <div className="inline-block rounded-xl bg-blue-500/20 border border-blue-400/30 px-3 py-1 text-xs font-bold text-blue-300">
               For Doctors & Healthcare Practices
             </div>
@@ -122,8 +123,8 @@ export default function ForEveryone() {
                 <ArrowUpRight size={14} />
               </Link>
             </div>
-          </article>
-        </div>
+          </StaggerItem>
+        </StaggerReveal>
       </div>
     </AnimatedSection>
   );
