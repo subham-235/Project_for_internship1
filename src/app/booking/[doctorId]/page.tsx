@@ -1081,7 +1081,7 @@ export default function BookingPage() {
 
           <div className="text-center">
 
-            <div className="mx-auto size-9 animate-spin rounded-full border-4 border-[#F2C2A7] border-t-[var(--brand)]" />
+            <div className="mx-auto size-9 animate-spin rounded-full border-4 border-[#dbeafe] border-t-[var(--brand)]" />
 
             <p className="mt-4 text-sm text-[var(--muted)]">
               Loading availability...
@@ -1302,7 +1302,7 @@ export default function BookingPage() {
 
               ) : (
 
-                <div className="mt-5 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-4 text-sm text-[#D96B32]">
+                <div className="mt-5 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4 text-sm text-[#D96B32]">
                   This doctor currently has no available appointment slots.
                 </div>
 
@@ -1379,7 +1379,7 @@ export default function BookingPage() {
 
               ) : (
 
-                <p className="mt-5 rounded-xl bg-[#F7F4EF] p-4 text-sm text-[var(--muted)]">
+                <p className="mt-5 rounded-xl bg-[#F8FAFC] p-4 text-sm text-[var(--muted)]">
                   No available time slots for this date.
                 </p>
 
@@ -1445,7 +1445,7 @@ export default function BookingPage() {
 
                         className={`rounded-xl border p-4 text-left transition ${
                           selected
-                            ? "border-[var(--brand)] bg-[#F7F4EF] text-[var(--brand)]"
+                            ? "border-[var(--brand)] bg-[#F8FAFC] text-[var(--brand)]"
                             : "border-[var(--line)] bg-white hover:border-[var(--brand)]"
                         }`}
                       >
@@ -1690,7 +1690,7 @@ export default function BookingPage() {
 
                   {!attachment ? (
 
-                    <label className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[var(--line)] bg-[#FFFFFF] px-6 py-8 text-center transition hover:border-[var(--brand)] hover:bg-[#F7F4EF]/30">
+                    <label className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[var(--line)] bg-[#FFFFFF] px-6 py-8 text-center transition hover:border-[var(--brand)] hover:bg-[#F8FAFC]/30">
 
                       <Paperclip size={26} className="text-[var(--brand)]" />
 
@@ -1721,7 +1721,7 @@ export default function BookingPage() {
 
                   ) : (
 
-                    <div className="mt-2 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF]/50 p-4">
+                    <div className="mt-2 rounded-xl border border-[#dbeafe] bg-[#F8FAFC]/50 p-4">
 
                       <div className="flex items-center justify-between gap-4">
 
@@ -1802,7 +1802,7 @@ export default function BookingPage() {
 
               <div
                 role="alert"
-                className="rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm text-[#C9362D]"
+                className="rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm text-[#C9362D]"
               >
                 {error}
               </div>

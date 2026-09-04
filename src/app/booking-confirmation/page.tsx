@@ -79,22 +79,22 @@ function getStatusLabel(status: BookingStatus) {
 function getStatusStyle(status: BookingStatus) {
   switch (status) {
     case "pending":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#D96B32]";
+      return "border-amber-200 bg-amber-50 text-amber-700";
 
     case "confirmed":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]";
+      return "border-emerald-200 bg-emerald-50 text-emerald-700";
 
     case "completed":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#D96B32]";
+      return "border-emerald-200 bg-emerald-50 text-emerald-700";
 
     case "cancelled":
-      return "border-[#F2C2A7] bg-[#F7F4EF] text-[#C9362D]";
+      return "border-rose-200 bg-rose-50 text-rose-700";
 
     case "missed":
-      return "border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68]";
+      return "border-rose-200 bg-rose-50 text-rose-700";
 
     default:
-      return "border-[#DDD7D0] bg-[#F7F4EF] text-[#746E68]";
+      return "border-[#E2E8F0] bg-[#F8FAFC] text-[#64748B]";
   }
 }
 
@@ -699,7 +699,7 @@ export default function BookingConfirmationPage() {
 
         <main className="grid min-h-[calc(100vh-73px)] place-items-center px-4">
           <div className="text-center">
-            <div className="mx-auto size-10 animate-spin rounded-full border-4 border-[#F2C2A7] border-t-[var(--brand)]" />
+            <div className="mx-auto size-10 animate-spin rounded-full border-4 border-[#dbeafe] border-t-[var(--brand)]" />
 
             <p className="mt-4 text-sm text-[var(--muted)]">
               Loading appointment...
@@ -745,7 +745,7 @@ export default function BookingConfirmationPage() {
               {/* PENDING MESSAGE */}
 
               {booking.status === "pending" && (
-                <div className="mx-auto mt-6 max-w-lg rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-5 py-4 text-left">
+                <div className="mx-auto mt-6 max-w-lg rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-5 py-4 text-left">
                   <p className="text-sm font-semibold text-[#D96B32]">
                     What happens next?
                   </p>
@@ -760,7 +760,7 @@ export default function BookingConfirmationPage() {
               {/* CONFIRMED MESSAGE */}
 
               {booking.status === "confirmed" && (
-                <div className="mx-auto mt-6 max-w-lg rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-5 py-4 text-left">
+                <div className="mx-auto mt-6 max-w-lg rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-5 py-4 text-left">
                   <p className="text-sm font-semibold text-[#C9362D]">
                     Appointment ready
                   </p>
@@ -858,7 +858,7 @@ export default function BookingConfirmationPage() {
                 {/* RESCHEDULED */}
 
                 {booking.rescheduledAt && (
-                  <div className="mt-5 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-4">
+                  <div className="mt-5 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4">
                     <p className="text-xs font-semibold uppercase tracking-wide text-[#D96B32]">
                       Appointment rescheduled
                     </p>
@@ -882,7 +882,7 @@ export default function BookingConfirmationPage() {
                 {/* ATTACHMENT */}
 
                 {booking.attachment && (
-                  <div className="mt-5 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF]/50 p-4">
+                  <div className="mt-5 rounded-xl border border-[#dbeafe] bg-[#F8FAFC]/50 p-4">
                     <p className="text-xs font-semibold uppercase tracking-wide text-[#C9362D]">
                       Medical attachment
                     </p>
@@ -937,7 +937,7 @@ export default function BookingConfirmationPage() {
 
           {!booking && (
             <>
-              <div className="mx-auto grid size-16 place-items-center rounded-full bg-[#F7F4EF] text-2xl">
+              <div className="mx-auto grid size-16 place-items-center rounded-full bg-[#F8FAFC] text-2xl">
                 !
               </div>
 

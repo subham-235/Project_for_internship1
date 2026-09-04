@@ -102,6 +102,7 @@ export function saveCurrentUser(user: StoredUser) {
   }
 
   localStorage.setItem(USER_KEY, JSON.stringify(user));
+  window.dispatchEvent(new Event("schedula-auth-change"));
 }
 
 export function clearCurrentUser() {
@@ -110,6 +111,7 @@ export function clearCurrentUser() {
   }
 
   localStorage.removeItem(USER_KEY);
+  window.dispatchEvent(new Event("schedula-auth-change"));
 }
 
 /* =========================================
@@ -725,7 +727,11 @@ export function rescheduleBooking(
 
     startsAt: `${newSlot.date}T${timeTo24Hour(newSlot.time)}:00`,
 
+    status: "pending",
+
     rescheduledAt: new Date().toISOString(),
+
+    rescheduleApprovalPending: true,
   };
 
   bookings[bookingIndex] = updated;
@@ -742,9 +748,9 @@ export function rescheduleBooking(
 
       type: "rescheduled",
 
-      title: "Appointment rescheduled",
+      title: "Approve new appointment time",
 
-      message: `Your appointment with ${booking.doctorName} has been moved to ${newSlot.date} at ${newSlot.time}.`,
+      message: `${booking.doctorName} proposed ${newSlot.date} at ${newSlot.time}. Review and approve the new time from your dashboard.`,
 
       appointmentId: booking.id,
     });
@@ -755,6 +761,25 @@ export function rescheduleBooking(
 
     return null;
   }
+}
+
+export function approveRescheduledBooking(bookingId: string): Booking | null {
+  const bookings = getBookings();
+  const index = bookings.findIndex((booking) => booking.id === bookingId);
+
+  if (index < 0 || !bookings[index].rescheduleApprovalPending) {
+    return null;
+  }
+
+  const updated: Booking = {
+    ...bookings[index],
+    status: "confirmed",
+    rescheduleApprovalPending: false,
+    rescheduleApprovedAt: new Date().toISOString(),
+  };
+
+  bookings[index] = updated;
+  return writeArray(BOOKINGS_KEY, bookings) ? updated : null;
 }
 
 /* =========================================
@@ -962,6 +987,44 @@ export function getDoctorReviews(): DoctorReview[] {
   return readArray<DoctorReview>(REVIEWS_KEY);
 }
 
+export function getReviewsForDoctor(doctorId: string): DoctorReview[] {
+  return getDoctorReviews()
+    .filter((review) => review.doctorId === doctorId)
+    .sort(
+      (first, second) =>
+        new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
+    );
+}
+
+export function applyDoctorReviewStats(
+  doctor: Doctor,
+  submittedReviews: DoctorReview[] = getDoctorReviews(),
+): Doctor {
+  const validReviews = submittedReviews.filter(
+    (review) =>
+      review.doctorId === doctor.id &&
+      Number.isFinite(review.rating) &&
+      review.rating >= 1 &&
+      review.rating <= 5,
+  );
+  const reviewCount = doctor.reviews + validReviews.length;
+
+  if (!validReviews.length) return doctor;
+
+  const submittedTotal = validReviews.reduce(
+    (total, review) => total + review.rating,
+    0,
+  );
+  const weightedRating =
+    (doctor.rating * doctor.reviews + submittedTotal) / reviewCount;
+
+  return {
+    ...doctor,
+    rating: Number(weightedRating.toFixed(2)),
+    reviews: reviewCount,
+  };
+}
+
 export function getReviewByBookingId(bookingId: string): DoctorReview | null {
   return (
     getDoctorReviews().find((review) => review.bookingId === bookingId) ?? null
@@ -977,7 +1040,13 @@ export function saveDoctorReview(review: DoctorReview): boolean {
     return false;
   }
 
-  return writeArray(REVIEWS_KEY, [review, ...reviews]);
+  if (!Number.isInteger(review.rating) || review.rating < 1 || review.rating > 5) {
+    return false;
+  }
+
+  const saved = writeArray(REVIEWS_KEY, [review, ...reviews]);
+  if (saved) window.dispatchEvent(new Event("schedula-reviews-change"));
+  return saved;
 }
 
 /* =========================================

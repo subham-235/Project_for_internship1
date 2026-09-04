@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  CalendarDays,
   CircleUserRound,
   FileText,
   LayoutDashboard,
@@ -237,79 +236,78 @@ export default function DoctorPrescriptionsPage() {
   };
 
   if (loading || !profile) {
-    return <main className="grid min-h-screen place-items-center bg-[#F7F4EF] text-sm text-[var(--muted)]">Loading prescriptions...</main>;
+    return <main className="grid min-h-screen place-items-center bg-[#F8FAFC] text-sm text-[var(--muted)]">Loading prescriptions...</main>;
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F4EF] text-[#12100F] lg:pl-[17.5rem]">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17.5rem] flex-col bg-[#12100F] px-4 text-white lg:flex">
+    <main className="min-h-screen bg-[#F8FAFC] text-[#0B1329] lg:pl-[17.5rem]">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17.5rem] flex-col bg-[#0B1329] px-4 text-white lg:flex">
         <Link href="/" className="flex h-20 items-center gap-3 border-b border-white/10 px-2">
-          <div className="grid size-10 place-items-center rounded-xl bg-[#F2C2A7] text-[#12100F]"><Stethoscope size={21} /></div>
-          <div><p className="text-lg font-bold">Schedula</p><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#F2C2A7]/55">Doctor workspace</p></div>
+          <div className="grid size-10 place-items-center rounded-xl bg-[#dbeafe] text-[#0B1329]"><Stethoscope size={21} /></div>
+          <div><p className="text-lg font-bold">Schedula</p><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#dbeafe]/55">Doctor workspace</p></div>
         </Link>
         <nav className="mt-7 space-y-1.5" aria-label="Doctor workspace navigation">
-          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#F2C2A7]/40">Workspace</p>
-          <Link href="/doctor-dashboard" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white"><LayoutDashboard size={18} />Overview</Link>
-          <Link href="/doctor-dashboard/appointments" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white"><ListChecks size={18} />Appointments</Link>
-          <Link href="/doctor-dashboard/calendar" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white"><CalendarDays size={18} />Calendar</Link>
-          <Link href="/doctor-dashboard/prescriptions" className="flex items-center gap-3 rounded-xl bg-white px-3.5 py-3 text-sm font-semibold text-[#12100F] shadow-sm"><Pill size={18} />Prescriptions</Link>
-          <Link href="/doctor-dashboard/profile" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F7F4EF]/70 hover:bg-white/10 hover:text-white"><CircleUserRound size={18} />Profile</Link>
+          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#dbeafe]/40">Workspace</p>
+          <Link href="/doctor-dashboard" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white"><LayoutDashboard size={18} />Overview</Link>
+          <Link href="/doctor-dashboard/appointments" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white"><ListChecks size={18} />Appointments</Link>
+          <Link href="/doctor-dashboard/prescriptions" className="flex items-center gap-3 rounded-xl bg-white px-3.5 py-3 text-sm font-semibold text-[#0B1329] shadow-sm"><Pill size={18} />Prescriptions</Link>
+          <Link href="/doctor-dashboard/profile" className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-[#F8FAFC]/70 hover:bg-white/10 hover:text-white"><CircleUserRound size={18} />Profile</Link>
         </nav>
         <div className="mt-auto mb-4 rounded-xl border border-white/10 bg-white/7 p-4">
           <p className="truncate text-sm font-semibold">{profile.name}</p>
-          <p className="mt-1 truncate text-xs text-[#F2C2A7]/55">{profile.specialty}</p>
+          <p className="mt-1 truncate text-xs text-[#dbeafe]/55">{profile.specialty}</p>
         </div>
       </aside>
 
       <div className="mx-auto max-w-[94rem] px-4 py-6 sm:px-7 xl:px-10">
-        <section className="border-l-4 border-[#E5483B] bg-[#12100F] p-6 text-white sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#E5483B]">Clinical records</p>
+        <section className="border-l-4 border-[#2563eb] bg-[#0B1329] p-6 text-white sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2563eb]">Clinical records</p>
           <h1 className="font-editorial mt-3 text-4xl tracking-tight">Prescriptions</h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-white/55">Review issued prescriptions, find a patient record, and download a polished copy for your files.</p>
         </section>
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-[#746E68]">
+          <p className="text-xs text-[#64748B]">
             Prescriptions can only be created for completed appointments.
           </p>
-          <button type="button" onClick={openCreate} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#12100F] px-4 py-3 text-sm font-semibold text-white hover:bg-[#12100F]">
+          <button type="button" onClick={openCreate} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B1329] px-4 py-3 text-sm font-semibold text-white hover:bg-[#0B1329]">
             <Plus size={16} /> New prescription
           </button>
         </div>
 
         {message && (
-          <div role="status" className="mt-4 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm font-semibold text-[#C9362D]">
+          <div role="status" className="mt-4 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm font-semibold text-[#C9362D]">
             {message}
           </div>
         )}
 
-        <div className="mt-5 grid border-y border-[#DDD7D0] bg-white sm:grid-cols-3">
-          <article className="border-b border-[#DDD7D0] p-4 sm:border-b-0 sm:border-r"><p className="text-xs font-semibold text-[#746E68]">Issued records</p><p className="font-editorial mt-1 text-3xl">{records.length}</p></article>
-          <article className="border-b border-[#DDD7D0] p-4 sm:border-b-0 sm:border-r"><p className="text-xs font-semibold text-[#746E68]">Patients covered</p><p className="font-editorial mt-1 text-3xl">{new Set(records.map((item) => item.booking.patientEmail)).size}</p></article>
-          <article className="p-4"><p className="text-xs font-semibold text-[#746E68]">Latest issued</p><p className="mt-2 text-sm font-bold">{records[0] ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(records[0].prescription.updatedAt ?? records[0].prescription.createdAt)) : "No records yet"}</p></article>
+        <div className="mt-5 grid border-y border-[#E2E8F0] bg-white sm:grid-cols-3">
+          <article className="border-b border-[#E2E8F0] p-4 sm:border-b-0 sm:border-r"><p className="text-xs font-semibold text-[#64748B]">Issued records</p><p className="font-editorial mt-1 text-3xl">{records.length}</p></article>
+          <article className="border-b border-[#E2E8F0] p-4 sm:border-b-0 sm:border-r"><p className="text-xs font-semibold text-[#64748B]">Patients covered</p><p className="font-editorial mt-1 text-3xl">{new Set(records.map((item) => item.booking.patientEmail)).size}</p></article>
+          <article className="p-4"><p className="text-xs font-semibold text-[#64748B]">Latest issued</p><p className="mt-2 text-sm font-bold">{records[0] ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(records[0].prescription.updatedAt ?? records[0].prescription.createdAt)) : "No records yet"}</p></article>
         </div>
 
         <div className="mt-5 grid gap-5 xl:grid-cols-[22rem_minmax(0,1fr)]">
-          <section className="h-fit overflow-hidden rounded-xl border border-[#DDD7D0] bg-white shadow-[0_8px_24px_rgba(18,16,15,0.04)]">
-            <div className="border-b border-[#DDD7D0] p-4">
+          <section className="h-fit overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_8px_24px_rgba(11,19,41,0.04)]">
+            <div className="border-b border-[#E2E8F0] p-4">
               <label className="relative block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#746E68]" size={16} />
-                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search patient or diagnosis" className="w-full rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] py-3 pl-10 pr-3 text-sm outline-none focus:border-[var(--brand)]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B]" size={16} />
+                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search patient or diagnosis" className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-3 pl-10 pr-3 text-sm outline-none focus:border-[var(--brand)]" />
               </label>
             </div>
             {visible.length ? (
-              <div className="max-h-[42rem] divide-y divide-[#DDD7D0] overflow-y-auto">
+              <div className="max-h-[42rem] divide-y divide-[#E2E8F0] overflow-y-auto">
                 {visible.map(({ prescription, booking }) => (
-                  <button key={prescription.id} type="button" onClick={() => setSelectedId(prescription.id)} className={`w-full p-4 text-left transition ${selected?.prescription.id === prescription.id ? "bg-[#F7F4EF] shadow-[inset_3px_0_0_#E5483B]" : "hover:bg-[#F7F4EF]"}`}>
+                  <button key={prescription.id} type="button" onClick={() => setSelectedId(prescription.id)} className={`w-full p-4 text-left transition ${selected?.prescription.id === prescription.id ? "bg-[#F8FAFC] shadow-[inset_3px_0_0_#2563eb]" : "hover:bg-[#F8FAFC]"}`}>
                     <div className="flex items-start gap-3">
-                      <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#F2C2A7] text-[var(--brand)]"><FileText size={17} /></div>
-                      <div className="min-w-0"><p className="truncate text-sm font-bold">{booking.patientName}</p><p className="mt-1 line-clamp-1 text-xs text-[#746E68]">{prescription.diagnosis}</p><p className="mt-2 text-[10px] font-semibold text-[var(--brand)]">{prescription.medications.length} medication{prescription.medications.length === 1 ? "" : "s"}</p></div>
+                      <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#dbeafe] text-[var(--brand)]"><FileText size={17} /></div>
+                      <div className="min-w-0"><p className="truncate text-sm font-bold">{booking.patientName}</p><p className="mt-1 line-clamp-1 text-xs text-[#64748B]">{prescription.diagnosis}</p><p className="mt-2 text-[10px] font-semibold text-[var(--brand)]">{prescription.medications.length} medication{prescription.medications.length === 1 ? "" : "s"}</p></div>
                     </div>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="p-10 text-center"><Pill className="mx-auto text-[#DDD7D0]" size={24} /><p className="mt-3 text-sm font-bold">No prescriptions found</p><p className="mt-1 text-xs text-[#746E68]">Completed appointment prescriptions will appear here.</p></div>
+              <div className="p-10 text-center"><Pill className="mx-auto text-[#E2E8F0]" size={24} /><p className="mt-3 text-sm font-bold">No prescriptions found</p><p className="mt-1 text-xs text-[#64748B]">Completed appointment prescriptions will appear here.</p></div>
             )}
           </section>
 
@@ -317,7 +315,7 @@ export default function DoctorPrescriptionsPage() {
             {selected ? (
               <>
                 <div className="mb-4 flex flex-wrap justify-end gap-2">
-                  <button type="button" onClick={() => openEdit(selected)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#DDD7D0] bg-white px-4 py-3 text-sm font-semibold text-[var(--brand)] hover:bg-[#F7F4EF]">
+                  <button type="button" onClick={() => openEdit(selected)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm font-semibold text-[var(--brand)] hover:bg-[#F8FAFC]">
                     <Pencil size={16} /> Edit prescription
                   </button>
                   <PrescriptionPdfButton booking={selected.booking} prescription={selected.prescription} />
@@ -325,30 +323,30 @@ export default function DoctorPrescriptionsPage() {
                 <PrescriptionView booking={selected.booking} prescription={selected.prescription} />
               </>
             ) : (
-              <div className="rounded-[18px] border border-dashed border-[#DDD7D0] bg-white p-12 text-center"><Pill className="mx-auto text-[#DDD7D0]" size={28} /><p className="mt-4 font-bold">Select a prescription</p><p className="mt-1 text-sm text-[#746E68]">Choose a patient record to review it here.</p></div>
+              <div className="rounded-[18px] border border-dashed border-[#E2E8F0] bg-white p-12 text-center"><Pill className="mx-auto text-[#E2E8F0]" size={28} /><p className="mt-4 font-bold">Select a prescription</p><p className="mt-1 text-sm text-[#64748B]">Choose a patient record to review it here.</p></div>
             )}
           </section>
         </div>
       </div>
 
       {formOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12100F]/60 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1329]/60 p-4 backdrop-blur-sm">
           <section role="dialog" aria-modal="true" aria-labelledby="prescription-form-title" className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[18px] bg-white shadow-2xl">
-            <header className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-[#DDD7D0] bg-white px-5 py-4 sm:px-6">
+            <header className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-[#E2E8F0] bg-white px-5 py-4 sm:px-6">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--brand)]">Prescription editor</p>
                 <h2 id="prescription-form-title" className="mt-1 text-xl font-bold">{editingId ? "Update prescription" : "Create prescription"}</h2>
-                <p className="mt-1 text-xs text-[#746E68]">Changes are immediately reflected in the patient’s completed appointment.</p>
+                <p className="mt-1 text-xs text-[#64748B]">Changes are immediately reflected in the patient’s completed appointment.</p>
               </div>
-              <button type="button" aria-label="Close prescription editor" onClick={() => setFormOpen(false)} className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#F7F4EF] text-[#746E68] hover:bg-[#DDD7D0]"><X size={18} /></button>
+              <button type="button" aria-label="Close prescription editor" onClick={() => setFormOpen(false)} className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#F8FAFC] text-[#64748B] hover:bg-[#E2E8F0]"><X size={18} /></button>
             </header>
 
             <div className="space-y-5 p-5 sm:p-6">
-              {formError && <div role="alert" className="rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] px-4 py-3 text-sm font-semibold text-[#C9362D]">{formError}</div>}
+              {formError && <div role="alert" className="rounded-xl border border-[#dbeafe] bg-[#F8FAFC] px-4 py-3 text-sm font-semibold text-[#C9362D]">{formError}</div>}
 
               <label className="block">
                 <span className="text-sm font-semibold">Completed appointment</span>
-                <select value={formBookingId} disabled={Boolean(editingId)} onChange={(event) => setFormBookingId(event.target.value)} className="mt-2 w-full rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-sm outline-none focus:border-[var(--brand)] disabled:opacity-65">
+                <select value={formBookingId} disabled={Boolean(editingId)} onChange={(event) => setFormBookingId(event.target.value)} className="mt-2 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm outline-none focus:border-[var(--brand)] disabled:opacity-65">
                   <option value="">Select patient appointment</option>
                   {completedBookings.map((booking) => (
                     <option key={booking.id} value={booking.id}>{booking.patientName} - {new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(booking.startsAt))}</option>
@@ -359,24 +357,24 @@ export default function DoctorPrescriptionsPage() {
 
               <label className="block">
                 <span className="text-sm font-semibold">Diagnosis</span>
-                <textarea rows={3} value={diagnosis} onChange={(event) => setDiagnosis(event.target.value)} placeholder="Enter the clinical diagnosis" className="mt-2 w-full resize-none rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-sm leading-6 outline-none focus:border-[var(--brand)]" />
+                <textarea rows={3} value={diagnosis} onChange={(event) => setDiagnosis(event.target.value)} placeholder="Enter the clinical diagnosis" className="mt-2 w-full resize-none rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm leading-6 outline-none focus:border-[var(--brand)]" />
               </label>
 
               <section>
                 <div className="flex items-center justify-between gap-3">
-                  <div><h3 className="text-sm font-semibold">Medicines</h3><p className="mt-1 text-xs text-[#746E68]">Include dosage, duration, and patient-facing directions.</p></div>
-                  <button type="button" onClick={() => setMedicines((current) => [...current, emptyMedicine()])} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#DDD7D0] px-3 py-2 text-xs font-semibold text-[var(--brand)]"><Plus size={14} /> Add medicine</button>
+                  <div><h3 className="text-sm font-semibold">Medicines</h3><p className="mt-1 text-xs text-[#64748B]">Include dosage, duration, and patient-facing directions.</p></div>
+                  <button type="button" onClick={() => setMedicines((current) => [...current, emptyMedicine()])} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#E2E8F0] px-3 py-2 text-xs font-semibold text-[var(--brand)]"><Plus size={14} /> Add medicine</button>
                 </div>
 
                 <div className="mt-3 space-y-3">
                   {medicines.map((medicine, index) => (
-                    <div key={medicine.id} className="rounded-xl border border-[#DDD7D0] bg-[#FFFFFF] p-4">
-                      <div className="flex items-center justify-between"><p className="text-xs font-bold text-[var(--brand)]">Medicine {index + 1}</p><button type="button" aria-label={`Remove medicine ${index + 1}`} disabled={medicines.length === 1} onClick={() => setMedicines((current) => current.filter((item) => item.id !== medicine.id))} className="grid size-8 place-items-center rounded-lg text-[#E5483B] hover:bg-[#F7F4EF] disabled:opacity-30"><Trash2 size={15} /></button></div>
+                    <div key={medicine.id} className="rounded-xl border border-[#E2E8F0] bg-[#FFFFFF] p-4">
+                      <div className="flex items-center justify-between"><p className="text-xs font-bold text-[var(--brand)]">Medicine {index + 1}</p><button type="button" aria-label={`Remove medicine ${index + 1}`} disabled={medicines.length === 1} onClick={() => setMedicines((current) => current.filter((item) => item.id !== medicine.id))} className="grid size-8 place-items-center rounded-lg text-[#2563eb] hover:bg-[#F8FAFC] disabled:opacity-30"><Trash2 size={15} /></button></div>
                       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                        <label className="text-xs font-semibold text-[#746E68]">Medicine name<input value={medicine.name} onChange={(event) => updateMedicine(medicine.id, "name", event.target.value)} placeholder="e.g. Paracetamol 500 mg" className="mt-1.5 w-full rounded-xl border border-[#DDD7D0] bg-white px-3 py-2.5 text-sm text-[#12100F] outline-none focus:border-[var(--brand)]" /></label>
-                        <label className="text-xs font-semibold text-[#746E68]">Dosage<input value={medicine.dosage} onChange={(event) => updateMedicine(medicine.id, "dosage", event.target.value)} placeholder="e.g. 1 tablet twice daily" className="mt-1.5 w-full rounded-xl border border-[#DDD7D0] bg-white px-3 py-2.5 text-sm text-[#12100F] outline-none focus:border-[var(--brand)]" /></label>
-                        <label className="text-xs font-semibold text-[#746E68]">Duration<input value={medicine.duration} onChange={(event) => updateMedicine(medicine.id, "duration", event.target.value)} placeholder="e.g. 5 days" className="mt-1.5 w-full rounded-xl border border-[#DDD7D0] bg-white px-3 py-2.5 text-sm text-[#12100F] outline-none focus:border-[var(--brand)]" /></label>
-                        <label className="text-xs font-semibold text-[#746E68]">Medicine instructions<input value={medicine.instructions} onChange={(event) => updateMedicine(medicine.id, "instructions", event.target.value)} placeholder="e.g. Take after food" className="mt-1.5 w-full rounded-xl border border-[#DDD7D0] bg-white px-3 py-2.5 text-sm text-[#12100F] outline-none focus:border-[var(--brand)]" /></label>
+                        <label className="text-xs font-semibold text-[#64748B]">Medicine name<input value={medicine.name} onChange={(event) => updateMedicine(medicine.id, "name", event.target.value)} placeholder="e.g. Paracetamol 500 mg" className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2.5 text-sm text-[#0B1329] outline-none focus:border-[var(--brand)]" /></label>
+                        <label className="text-xs font-semibold text-[#64748B]">Dosage<input value={medicine.dosage} onChange={(event) => updateMedicine(medicine.id, "dosage", event.target.value)} placeholder="e.g. 1 tablet twice daily" className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2.5 text-sm text-[#0B1329] outline-none focus:border-[var(--brand)]" /></label>
+                        <label className="text-xs font-semibold text-[#64748B]">Duration<input value={medicine.duration} onChange={(event) => updateMedicine(medicine.id, "duration", event.target.value)} placeholder="e.g. 5 days" className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2.5 text-sm text-[#0B1329] outline-none focus:border-[var(--brand)]" /></label>
+                        <label className="text-xs font-semibold text-[#64748B]">Medicine instructions<input value={medicine.instructions} onChange={(event) => updateMedicine(medicine.id, "instructions", event.target.value)} placeholder="e.g. Take after food" className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2.5 text-sm text-[#0B1329] outline-none focus:border-[var(--brand)]" /></label>
                       </div>
                     </div>
                   ))}
@@ -385,11 +383,11 @@ export default function DoctorPrescriptionsPage() {
 
               <label className="block">
                 <span className="text-sm font-semibold">General instructions</span>
-                <textarea rows={4} value={instructions} onChange={(event) => setInstructions(event.target.value)} placeholder="Diet, activity, follow-up, warning signs, or other care instructions" className="mt-2 w-full resize-none rounded-xl border border-[#DDD7D0] bg-[#F7F4EF] px-4 py-3 text-sm leading-6 outline-none focus:border-[var(--brand)]" />
+                <textarea rows={4} value={instructions} onChange={(event) => setInstructions(event.target.value)} placeholder="Diet, activity, follow-up, warning signs, or other care instructions" className="mt-2 w-full resize-none rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm leading-6 outline-none focus:border-[var(--brand)]" />
               </label>
 
-              <div className="flex flex-col-reverse gap-2 border-t border-[#DDD7D0] pt-5 sm:flex-row sm:justify-end">
-                <button type="button" onClick={() => setFormOpen(false)} className="rounded-xl border border-[#DDD7D0] px-5 py-3 text-sm font-semibold">Cancel</button>
+              <div className="flex flex-col-reverse gap-2 border-t border-[#E2E8F0] pt-5 sm:flex-row sm:justify-end">
+                <button type="button" onClick={() => setFormOpen(false)} className="rounded-xl border border-[#E2E8F0] px-5 py-3 text-sm font-semibold">Cancel</button>
                 <button type="button" onClick={saveForm} disabled={!completedBookings.length} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--brand-deep)] disabled:cursor-not-allowed disabled:opacity-50"><Save size={16} />{editingId ? "Update prescription" : "Save prescription"}</button>
               </div>
             </div>

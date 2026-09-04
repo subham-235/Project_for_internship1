@@ -7,6 +7,8 @@ export type DoctorReview = {
 
   patientId?: string;
 
+  patientName?: string;
+
   patientEmail: string;
 
   rating: number;

@@ -1025,14 +1025,14 @@ export default function DoctorProfilePage() {
 
 
         {message && (
-          <div className="mt-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-4 text-sm text-[#C9362D]">
+          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4 text-sm text-[#C9362D]">
             {message}
           </div>
         )}
 
 
         {error && (
-          <div className="mt-6 rounded-xl border border-[#F2C2A7] bg-[#F7F4EF] p-4 text-sm text-[#C9362D]">
+          <div className="mt-6 rounded-xl border border-[#dbeafe] bg-[#F8FAFC] p-4 text-sm text-[#C9362D]">
             {error}
           </div>
         )}
@@ -1078,7 +1078,7 @@ export default function DoctorProfilePage() {
                   currentUser.email
                 }
                 disabled
-                className="mt-2 w-full rounded-xl border border-[var(--line)] bg-[#F7F4EF] px-4 py-3 text-sm text-[var(--muted)]"
+                className="mt-2 w-full rounded-xl border border-[var(--line)] bg-[#F8FAFC] px-4 py-3 text-sm text-[var(--muted)]"
               />
             </label>
 
@@ -1353,7 +1353,7 @@ export default function DoctorProfilePage() {
           </p>
 
 
-          <div className="mt-6 rounded-xl bg-[#F7F4EF] p-5">
+          <div className="mt-6 rounded-xl bg-[#F8FAFC] p-5">
 
             <h3 className="font-semibold">
               Add Single Slot
@@ -1409,7 +1409,7 @@ export default function DoctorProfilePage() {
           </div>
 
 
-          <div className="mt-5 rounded-xl bg-[#F7F4EF] p-5">
+          <div className="mt-5 rounded-xl bg-[#F8FAFC] p-5">
 
             <h3 className="font-semibold">
               Recurring Availability
@@ -1597,8 +1597,8 @@ export default function DoctorProfilePage() {
                         className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
                           slot.status ===
                           "available"
-                            ? "bg-[#F7F4EF] text-[#C9362D]"
-                            : "bg-[#F7F4EF] text-[#D96B32]"
+                            ? "bg-[#F8FAFC] text-[#C9362D]"
+                            : "bg-[#F8FAFC] text-[#D96B32]"
                         }`}
                       >
                         {

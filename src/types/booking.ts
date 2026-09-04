@@ -55,6 +55,8 @@ export type Booking = {
 
   rescheduledAt?: string;
   originalStartsAt?: string;
+  rescheduleApprovalPending?: boolean;
+  rescheduleApprovedAt?: string;
 
   attachment?: BookingAttachment;
 };
